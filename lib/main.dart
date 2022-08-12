@@ -49,7 +49,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   final GlobalKey<NavigatorState> _navigator = GlobalKey<NavigatorState>();
 
-  final authBloc = getIt<AuthBloc>()..add(const AuthEvent.checkAuth());
+  final authBloc = getIt<AuthBloc>();
   @override
   Widget build(BuildContext context) {
     final c = getIt<Stream<ConnectivityResult>>();

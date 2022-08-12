@@ -460,7 +460,7 @@ mixin _$SignInScreenState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() completed,
+    required TResult Function(UserModals user) completed,
     required TResult Function(AppExceptions appExceptions) exception,
   }) =>
       throw _privateConstructorUsedError;
@@ -468,7 +468,7 @@ mixin _$SignInScreenState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? completed,
+    TResult Function(UserModals user)? completed,
     TResult Function(AppExceptions appExceptions)? exception,
   }) =>
       throw _privateConstructorUsedError;
@@ -476,7 +476,7 @@ mixin _$SignInScreenState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? completed,
+    TResult Function(UserModals user)? completed,
     TResult Function(AppExceptions appExceptions)? exception,
     required TResult orElse(),
   }) =>
@@ -567,7 +567,7 @@ class _$_Initial implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() completed,
+    required TResult Function(UserModals user) completed,
     required TResult Function(AppExceptions appExceptions) exception,
   }) {
     return initial();
@@ -578,7 +578,7 @@ class _$_Initial implements _Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? completed,
+    TResult Function(UserModals user)? completed,
     TResult Function(AppExceptions appExceptions)? exception,
   }) {
     return initial?.call();
@@ -589,7 +589,7 @@ class _$_Initial implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? completed,
+    TResult Function(UserModals user)? completed,
     TResult Function(AppExceptions appExceptions)? exception,
     required TResult orElse(),
   }) {
@@ -683,7 +683,7 @@ class _$_Loading implements _Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() completed,
+    required TResult Function(UserModals user) completed,
     required TResult Function(AppExceptions appExceptions) exception,
   }) {
     return loading();
@@ -694,7 +694,7 @@ class _$_Loading implements _Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? completed,
+    TResult Function(UserModals user)? completed,
     TResult Function(AppExceptions appExceptions)? exception,
   }) {
     return loading?.call();
@@ -705,7 +705,7 @@ class _$_Loading implements _Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? completed,
+    TResult Function(UserModals user)? completed,
     TResult Function(AppExceptions appExceptions)? exception,
     required TResult orElse(),
   }) {
@@ -762,6 +762,7 @@ abstract class _$$_CompletedCopyWith<$Res> {
   factory _$$_CompletedCopyWith(
           _$_Completed value, $Res Function(_$_Completed) then) =
       __$$_CompletedCopyWithImpl<$Res>;
+  $Res call({UserModals user});
 }
 
 /// @nodoc
@@ -774,36 +775,59 @@ class __$$_CompletedCopyWithImpl<$Res>
 
   @override
   _$_Completed get _value => super._value as _$_Completed;
+
+  @override
+  $Res call({
+    Object? user = freezed,
+  }) {
+    return _then(_$_Completed(
+      user: user == freezed
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as UserModals,
+    ));
+  }
 }
 
 /// @nodoc
 
 class _$_Completed implements _Completed {
-  const _$_Completed();
+  const _$_Completed({required this.user});
+
+  @override
+  final UserModals user;
 
   @override
   String toString() {
-    return 'SignInScreenState.completed()';
+    return 'SignInScreenState.completed(user: $user)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_Completed);
+        (other.runtimeType == runtimeType &&
+            other is _$_Completed &&
+            const DeepCollectionEquality().equals(other.user, user));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(user));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_CompletedCopyWith<_$_Completed> get copyWith =>
+      __$$_CompletedCopyWithImpl<_$_Completed>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() completed,
+    required TResult Function(UserModals user) completed,
     required TResult Function(AppExceptions appExceptions) exception,
   }) {
-    return completed();
+    return completed(user);
   }
 
   @override
@@ -811,10 +835,10 @@ class _$_Completed implements _Completed {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? completed,
+    TResult Function(UserModals user)? completed,
     TResult Function(AppExceptions appExceptions)? exception,
   }) {
-    return completed?.call();
+    return completed?.call(user);
   }
 
   @override
@@ -822,12 +846,12 @@ class _$_Completed implements _Completed {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? completed,
+    TResult Function(UserModals user)? completed,
     TResult Function(AppExceptions appExceptions)? exception,
     required TResult orElse(),
   }) {
     if (completed != null) {
-      return completed();
+      return completed(user);
     }
     return orElse();
   }
@@ -871,7 +895,12 @@ class _$_Completed implements _Completed {
 }
 
 abstract class _Completed implements SignInScreenState {
-  const factory _Completed() = _$_Completed;
+  const factory _Completed({required final UserModals user}) = _$_Completed;
+
+  UserModals get user;
+  @JsonKey(ignore: true)
+  _$$_CompletedCopyWith<_$_Completed> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -951,7 +980,7 @@ class _$_Exception implements _Exception {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() completed,
+    required TResult Function(UserModals user) completed,
     required TResult Function(AppExceptions appExceptions) exception,
   }) {
     return exception(appExceptions);
@@ -962,7 +991,7 @@ class _$_Exception implements _Exception {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? completed,
+    TResult Function(UserModals user)? completed,
     TResult Function(AppExceptions appExceptions)? exception,
   }) {
     return exception?.call(appExceptions);
@@ -973,7 +1002,7 @@ class _$_Exception implements _Exception {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? completed,
+    TResult Function(UserModals user)? completed,
     TResult Function(AppExceptions appExceptions)? exception,
     required TResult orElse(),
   }) {

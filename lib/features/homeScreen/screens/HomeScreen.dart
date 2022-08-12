@@ -4,13 +4,18 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ihar_flutter/core/injection.dart';
+import 'package:ihar_flutter/core/modals/userModal.dart';
+import 'package:ihar_flutter/core/requests/userRequests.dart';
 import 'package:ihar_flutter/features/homeScreen/screens/Drawer.dart';
 import 'package:ihar_flutter/features/feed/screens/FeedTiles.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../../core/firebase_classes/firebase_auth.dart';
+import '../../feed/bloc/feed_bloc/feed_bloc.dart';
+import '../../login/bloc/sign_in_screen_bloc/sign_in_screen_bloc.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -108,12 +113,13 @@ class _SearchBarState extends State<SearchBar> {
       },
       onSubmitted: (String query) {
         // BlocProvider.of<SearchBloc>(context)..add(SearchVideosPressButton(query: query));
+        Navigator.of(context).pushNamed('/home/searchResults', arguments: query);
         widget.floatingSearchBarController.close();
         if (Device.screenType == ScreenType.mobile) {
           widget.floatingSearchBarController.hide();
         }
       },
-      clearQueryOnClose: false,
+      clearQueryOnClose: true,
       onQueryChanged: (String query) async {
         if (query == "") {
           setState(() {
@@ -163,6 +169,8 @@ class _SearchBarState extends State<SearchBar> {
                 return InkWell(
                   onTap: () {
                     // BlocProvider.of<SearchBloc>(context)..add(SearchVideosPressButton(query: ls[index]));
+                    Navigator.of(context).pushNamed('/home/searchResults', arguments: ls[index]);
+
                     widget.floatingSearchBarController.query = ls[index];
                     widget.floatingSearchBarController.close();
                   },
@@ -265,7 +273,11 @@ class __HomeBodyState extends State<_HomeBody> {
               ),
             ),
           ),
-          FeedTiles(scrollController: scrollController),
+          // FeedTiles(scrollController: scrollController),
+          BlocProvider(
+            create: (context) => getIt<FeedBloc>()..add(const FeedEvent.getPosts()),
+            child: FeedTiles(scrollController: scrollController),
+          ),
           // CustomFeed(scrollController: scrollController, gkey: gkey),
           if (Device.width > 760)
             Positioned(
@@ -353,11 +365,23 @@ class __HomeBodyState extends State<_HomeBody> {
                               widget.floatingSearchBarController.open();
                             }
                           }),
-                    SizedBox(width: 10),
-                    CircleAvatar(
-                      backgroundColor: Theme.of(context).backgroundColor,
+                    const SizedBox(width: 10),
+                    InkWell(
+                      onTap: () async {
+                        final appAuth = getIt<AppAuth>();
+                        UserModals? user = appAuth.userModal;
+                        if (user == null) {
+                          appAuth.userModal = await UsersRequests.getUser(getIt<Dio>(),
+                              id: appAuth.firebaseAuthInstance.currentUser!.uid);
+                          user = appAuth.userModal;
+                        }
+                        Navigator.of(context).pushNamed("/home/user", arguments: [user, appAuth]);
+                      },
+                      child: CircleAvatar(
+                        backgroundColor: Theme.of(context).backgroundColor,
+                      ),
                     ),
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                   ],
                 ),
               ),
@@ -369,7 +393,9 @@ class __HomeBodyState extends State<_HomeBody> {
   }
 
   _scrollListener() {
-    if (widget.scrollController.position.userScrollDirection == ScrollDirection.reverse && showAppBar) {
+    if (widget.scrollController.position.userScrollDirection == ScrollDirection.reverse &&
+        showAppBar &&
+        widget.scrollController.offset > 70) {
       print('scrolled down');
       setState(() {
         showAppBar = false;

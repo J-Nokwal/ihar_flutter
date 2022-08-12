@@ -19,7 +19,7 @@ class UserModals {
     required this.isAnaoymous,
     this.email,
     this.profileLink,
-    this.profilePhotoLink,
+    required this.profilePhotoLink,
     this.firstName,
     this.lastName,
     this.createdAt,
@@ -31,7 +31,7 @@ class UserModals {
   bool? isAnaoymous;
   String? email;
   String? profileLink;
-  String? profilePhotoLink;
+  String profilePhotoLink;
   String? firstName;
   String? lastName;
   DateTime? createdAt;

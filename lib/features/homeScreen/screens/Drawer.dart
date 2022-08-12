@@ -1,20 +1,15 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
-import 'package:ihar_flutter/core/errors.dart';
 import 'package:ihar_flutter/core/firebase_classes/firebase_auth.dart';
 import 'package:ihar_flutter/core/firebase_classes/firebase_storage.dart';
 import 'package:ihar_flutter/core/injection.dart';
-import 'package:ihar_flutter/core/modals/userModal.dart';
-import 'package:ihar_flutter/features/common/snakbar.dart';
+import 'package:ihar_flutter/core/requests/AvatarGeneratorRequests.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
-
-import '../bloc/test_bloc/test_bloc_bloc.dart';
 
 class AppDrawer extends StatefulWidget {
   const AppDrawer({Key? key}) : super(key: key);
@@ -73,10 +68,12 @@ class _AppDrawerState extends State<AppDrawer> {
           },
         ),
         ListTile(
-          title: Text("bloc test"),
+          title: const Text("seacdrch 'hii'"),
           onTap: () async {
+            // Navigator.of(context).pushNamed('/home/searchResults', arguments: "hii");
+            final a = await AvatarGenerator.getNewAvatar(getIt<Dio>());
             Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-              return TestBlocScreen();
+              return Scaffold(body: Image.memory(a));
             }));
           },
         ),
@@ -207,40 +204,6 @@ class _SearchWidState extends State<SearchWid> {
           ),
         );
       },
-    );
-  }
-}
-
-class TestBlocScreen extends StatelessWidget {
-  TestBlocScreen({Key? key}) : super(key: key);
-  final testbloc = TestBlocBloc();
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider<TestBlocBloc>(
-      create: (context) => testbloc,
-      child: Scaffold(
-        body: BlocBuilder<TestBlocBloc, TestBlocState>(
-          buildWhen: (previous, current) {
-            return current.map(
-              error: (s) {
-                ScaffoldMessenger.of(context).showSnackBar(AppSnackBars.withText("lsiansdnakdnkj"));
-                return true;
-              },
-              initial: (value) => true,
-            );
-          },
-          builder: (context, state) {
-            return Container(
-              color: state.mapOrNull(initial: (s) => Colors.amber),
-              child: InkWell(
-                  onTap: () async {
-                    context.read<TestBlocBloc>().add(TestBlocEvent.trigger());
-                  },
-                  child: Center()),
-            );
-          },
-        ),
-      ),
     );
   }
 }

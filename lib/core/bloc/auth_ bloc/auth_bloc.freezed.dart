@@ -20,18 +20,21 @@ mixin _$AuthEvent {
   TResult when<TResult extends Object?>({
     required TResult Function() checkAuth,
     required TResult Function() userChange,
+    required TResult Function() addUserStream,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? checkAuth,
     TResult Function()? userChange,
+    TResult Function()? addUserStream,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? checkAuth,
     TResult Function()? userChange,
+    TResult Function()? addUserStream,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -39,18 +42,21 @@ mixin _$AuthEvent {
   TResult map<TResult extends Object?>({
     required TResult Function(_CheckAuth value) checkAuth,
     required TResult Function(_UserChange value) userChange,
+    required TResult Function(_AddUserStream value) addUserStream,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_CheckAuth value)? checkAuth,
     TResult Function(_UserChange value)? userChange,
+    TResult Function(_AddUserStream value)? addUserStream,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_CheckAuth value)? checkAuth,
     TResult Function(_UserChange value)? userChange,
+    TResult Function(_AddUserStream value)? addUserStream,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -113,6 +119,7 @@ class _$_CheckAuth implements _CheckAuth {
   TResult when<TResult extends Object?>({
     required TResult Function() checkAuth,
     required TResult Function() userChange,
+    required TResult Function() addUserStream,
   }) {
     return checkAuth();
   }
@@ -122,6 +129,7 @@ class _$_CheckAuth implements _CheckAuth {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? checkAuth,
     TResult Function()? userChange,
+    TResult Function()? addUserStream,
   }) {
     return checkAuth?.call();
   }
@@ -131,6 +139,7 @@ class _$_CheckAuth implements _CheckAuth {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? checkAuth,
     TResult Function()? userChange,
+    TResult Function()? addUserStream,
     required TResult orElse(),
   }) {
     if (checkAuth != null) {
@@ -144,6 +153,7 @@ class _$_CheckAuth implements _CheckAuth {
   TResult map<TResult extends Object?>({
     required TResult Function(_CheckAuth value) checkAuth,
     required TResult Function(_UserChange value) userChange,
+    required TResult Function(_AddUserStream value) addUserStream,
   }) {
     return checkAuth(this);
   }
@@ -153,6 +163,7 @@ class _$_CheckAuth implements _CheckAuth {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_CheckAuth value)? checkAuth,
     TResult Function(_UserChange value)? userChange,
+    TResult Function(_AddUserStream value)? addUserStream,
   }) {
     return checkAuth?.call(this);
   }
@@ -162,6 +173,7 @@ class _$_CheckAuth implements _CheckAuth {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_CheckAuth value)? checkAuth,
     TResult Function(_UserChange value)? userChange,
+    TResult Function(_AddUserStream value)? addUserStream,
     required TResult orElse(),
   }) {
     if (checkAuth != null) {
@@ -217,6 +229,7 @@ class _$_UserChange implements _UserChange {
   TResult when<TResult extends Object?>({
     required TResult Function() checkAuth,
     required TResult Function() userChange,
+    required TResult Function() addUserStream,
   }) {
     return userChange();
   }
@@ -226,6 +239,7 @@ class _$_UserChange implements _UserChange {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? checkAuth,
     TResult Function()? userChange,
+    TResult Function()? addUserStream,
   }) {
     return userChange?.call();
   }
@@ -235,6 +249,7 @@ class _$_UserChange implements _UserChange {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? checkAuth,
     TResult Function()? userChange,
+    TResult Function()? addUserStream,
     required TResult orElse(),
   }) {
     if (userChange != null) {
@@ -248,6 +263,7 @@ class _$_UserChange implements _UserChange {
   TResult map<TResult extends Object?>({
     required TResult Function(_CheckAuth value) checkAuth,
     required TResult Function(_UserChange value) userChange,
+    required TResult Function(_AddUserStream value) addUserStream,
   }) {
     return userChange(this);
   }
@@ -257,6 +273,7 @@ class _$_UserChange implements _UserChange {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_CheckAuth value)? checkAuth,
     TResult Function(_UserChange value)? userChange,
+    TResult Function(_AddUserStream value)? addUserStream,
   }) {
     return userChange?.call(this);
   }
@@ -266,6 +283,7 @@ class _$_UserChange implements _UserChange {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_CheckAuth value)? checkAuth,
     TResult Function(_UserChange value)? userChange,
+    TResult Function(_AddUserStream value)? addUserStream,
     required TResult orElse(),
   }) {
     if (userChange != null) {
@@ -277,6 +295,116 @@ class _$_UserChange implements _UserChange {
 
 abstract class _UserChange implements AuthEvent {
   const factory _UserChange() = _$_UserChange;
+}
+
+/// @nodoc
+abstract class _$$_AddUserStreamCopyWith<$Res> {
+  factory _$$_AddUserStreamCopyWith(
+          _$_AddUserStream value, $Res Function(_$_AddUserStream) then) =
+      __$$_AddUserStreamCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$_AddUserStreamCopyWithImpl<$Res> extends _$AuthEventCopyWithImpl<$Res>
+    implements _$$_AddUserStreamCopyWith<$Res> {
+  __$$_AddUserStreamCopyWithImpl(
+      _$_AddUserStream _value, $Res Function(_$_AddUserStream) _then)
+      : super(_value, (v) => _then(v as _$_AddUserStream));
+
+  @override
+  _$_AddUserStream get _value => super._value as _$_AddUserStream;
+}
+
+/// @nodoc
+
+class _$_AddUserStream implements _AddUserStream {
+  const _$_AddUserStream();
+
+  @override
+  String toString() {
+    return 'AuthEvent.addUserStream()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$_AddUserStream);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() checkAuth,
+    required TResult Function() userChange,
+    required TResult Function() addUserStream,
+  }) {
+    return addUserStream();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? checkAuth,
+    TResult Function()? userChange,
+    TResult Function()? addUserStream,
+  }) {
+    return addUserStream?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? checkAuth,
+    TResult Function()? userChange,
+    TResult Function()? addUserStream,
+    required TResult orElse(),
+  }) {
+    if (addUserStream != null) {
+      return addUserStream();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_CheckAuth value) checkAuth,
+    required TResult Function(_UserChange value) userChange,
+    required TResult Function(_AddUserStream value) addUserStream,
+  }) {
+    return addUserStream(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_CheckAuth value)? checkAuth,
+    TResult Function(_UserChange value)? userChange,
+    TResult Function(_AddUserStream value)? addUserStream,
+  }) {
+    return addUserStream?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_CheckAuth value)? checkAuth,
+    TResult Function(_UserChange value)? userChange,
+    TResult Function(_AddUserStream value)? addUserStream,
+    required TResult orElse(),
+  }) {
+    if (addUserStream != null) {
+      return addUserStream(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _AddUserStream implements AuthEvent {
+  const factory _AddUserStream() = _$_AddUserStream;
 }
 
 /// @nodoc

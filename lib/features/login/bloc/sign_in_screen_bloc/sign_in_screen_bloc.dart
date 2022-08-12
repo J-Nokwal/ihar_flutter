@@ -1,11 +1,16 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutterfire_ui/auth.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:ihar_flutter/core/errors.dart';
+import 'package:ihar_flutter/core/firebase_classes/firebase_storage.dart';
+import 'package:ihar_flutter/core/requests/AvatarGeneratorRequests.dart';
 import 'package:ihar_flutter/core/requests/userRequests.dart';
 import 'package:ihar_flutter/features/login/requests/createUserRequest.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../core/firebase_classes/firebase_auth.dart';
@@ -17,20 +22,25 @@ part 'sign_in_screen_bloc.freezed.dart';
 
 @injectable
 class SignInScreenBloc extends Bloc<SignInScreenEvent, SignInScreenState> {
-  SignInScreenBloc(Dio dio, AppAuth appAuth) : super(const _Initial()) {
+  SignInScreenBloc(Dio dio, AppAuth appAuth, AppFireBaseStorage appFireBaseStorage) : super(const _Initial()) {
     on<SignInScreenEvent>((event, emit) async {
       await event.map(signInWithGoogle: (_SignInWithGoogle event) async {
         emit(const _Loading());
         try {
           UserCredential userCredential = await appAuth.signInWithGoogle();
+          UserModals user;
           if (userCredential.additionalUserInfo!.isNewUser) {
-            UserModals userModals = UserModals(userId: userCredential.user!.uid.toString(), isAnaoymous: false);
-            // ignore: await_only_futures
-            createUserRequest(userModals);
+            UserModals userModals = UserModals(
+                userId: userCredential.user!.uid.toString(),
+                profilePhotoLink: userCredential.user!.photoURL ?? "",
+                isAnaoymous: false);
+            user = await UsersRequests.createUser(dio, user: userModals);
+            // createUserRequest(userModals);
           } else {
-            getUserRequest(userCredential.user!.uid);
+            user = await UsersRequests.getUser(dio, id: userCredential.user!.uid);
+            // getUserRequest(userCredential.user!.uid);
           }
-          emit(const _Completed());
+          emit(_Completed(user: user));
         } on AppExceptions catch (appExceptions) {
           emit(_Exception(appExceptions: appExceptions));
           // addError(appExceptions, e);
@@ -38,24 +48,37 @@ class SignInScreenBloc extends Bloc<SignInScreenEvent, SignInScreenState> {
       }, signInWithEmail: (_SignInWithEmail event) {
         emit(const _Loading());
 
-        emit(const _Completed());
+        // emit( _Completed());
       }, signInAnonyously: (_SignInAnonyously event) async {
         emit(const _Loading());
         try {
+          appAuth.signOut();
           UserCredential userCredential = await appAuth.signInAnonymously();
+          // final a = await AvatarGenerator.getNewAvatar(dio);
+          // final b = XFile.fromData(a);
+          // final UploadReturn uploadReturn = await appFireBaseStorage.uploadProfilePic(b);
+          // await uploadReturn.task;
+
+          // String profileLink = await uploadReturn.mountainsRef.getDownloadURL();
           if (userCredential.additionalUserInfo!.isNewUser) {
-            UserModals userModals = UserModals(userId: userCredential.user!.uid.toString(), isAnaoymous: true);
+            UserModals userModals =
+                UserModals(userId: userCredential.user!.uid.toString(), profilePhotoLink: "", isAnaoymous: true);
             // ignore: await_only_futures
             appAuth.userModal = await UsersRequests.createUser(dio, user: userModals);
           } else {
             appAuth.userModal = await UsersRequests.getUser(dio, id: userCredential.user!.uid);
           }
-          emit(const _Completed());
+          emit(_Completed(user: appAuth.userModal!));
         } on AppExceptions catch (appExceptions) {
+          appAuth.signOut();
+          print("signed out because of error: ${appExceptions.message}");
           emit(_Exception(appExceptions: appExceptions));
           // addError(appExceptions, e);
+        } catch (e) {
+          appAuth.signOut();
+          print("signed out because of error");
+          emit(_Exception(appExceptions: AppExceptions.appAuthException()));
         }
-        emit(const _Completed());
       });
     });
   }

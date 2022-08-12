@@ -22,6 +22,15 @@ class AppFireBaseStorage {
     }
   }
 
+  Future<UploadReturn> uploadProfilePic(XFile file) async {
+    final mountainsRef = storageRef.child("profilePics/${DateTime.now().toIso8601String()}${file.name}");
+    try {
+      return UploadReturn(mountainsRef.putFile(File(file.path)), mountainsRef);
+    } on FirebaseException catch (e) {
+      rethrow;
+    }
+  }
+
   Future downloadimage() async {
     try {
       final ImageReference = FirebaseStorage.instance.refFromURL(

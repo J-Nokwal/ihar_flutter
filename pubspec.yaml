@@ -27,41 +27,35 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  auto_size_text: ^3.0.0
+  cached_network_image: ^3.2.1
+  connectivity_plus: ^2.3.6
+  cupertino_icons: ^1.0.2
+  dio: ^4.0.6
+  firebase_auth: ^3.4.2
+  firebase_core: ^1.19.2
+  firebase_dynamic_links: ^4.3.3
+  firebase_storage: ^10.3.3
   flutter:
     sdk: flutter
-
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
-  firebase_core: ^1.19.2
-  firebase_auth: ^3.4.2
-  google_sign_in: ^5.4.0
-  flutterfire_ui: ^0.4.2+3
   flutter_bloc: ^8.0.1
-  dio: ^4.0.6
-  connectivity_plus: ^2.3.6
+  flutterfire_ui: ^0.4.2+3
   freezed: ^2.1.0+1
   freezed_annotation: ^2.1.0
-  injectable: ^1.5.3
   get_it: ^7.2.0
-  firebase_dynamic_links: ^4.3.3
+  google_sign_in: ^5.4.0
   google_sign_in_web: ^0.10.2
-  material_floating_search_bar: ^0.3.7
-  auto_size_text: ^3.0.0
-  firebase_storage: ^10.3.3
-  responsive_sizer: ^3.1.0
+  horizontal_card_pager: ^1.1.1
   image_picker: ^0.8.5+3
+  injectable: ^1.5.3
+  material_floating_search_bar: ^0.3.7
   octo_image: ^1.0.2
-  cached_network_image: ^3.2.1
+  responsive_sizer: ^3.1.0
   rive: ^0.9.1
-
+  sliver_tools: ^0.2.7
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
   build_runner: ^2.2.0
-  injectable_generator: ^1.5.4
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -69,10 +63,12 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  flutter_test:
+    sdk: flutter
+  injectable_generator: ^1.5.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
-
 # The following section is specific to Flutter packages.
 flutter:
 
@@ -86,13 +82,10 @@ flutter:
     - assets/imgaes/
     - assets/rive/
   #   - images/a_dot_ham.jpeg
-
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
-
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
-
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a

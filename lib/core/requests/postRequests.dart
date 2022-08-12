@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:ihar_flutter/core/modals/getPostByPageIdModal.dart';
 import 'package:ihar_flutter/core/modals/postModal.dart';
 import 'package:ihar_flutter/core/requests/requestUtils.dart';
 import 'package:ihar_flutter/core/requests/userRequests.dart';
@@ -117,6 +118,28 @@ abstract class PostsRequests {
       }
       final Response response = await dio.delete('/user/$id');
       print(response.data);
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.statusCode == 400) {
+        print(e.response!.data);
+      }
+      print(e.message);
+      throw AppExceptions.serverException(message: "Invalid operation", e: e);
+    } on AppExceptions {
+      rethrow;
+    } catch (e) {
+      throw AppExceptions(message: "Error");
+    }
+  }
+
+  static Future<GetPostByPageIdModal> getPostByPageIdByUser(Dio dio,
+      {int pageId = 0, required String byUser, String? queryTime}) async {
+    try {
+      if (!await hasNetwork()) {
+        throw AppExceptions.networkException();
+      }
+      final Response response =
+          await dio.get('/post/byPage/$pageId/$byUser', queryParameters: {"queryTime": queryTime});
+      return getPostByPageIdModalFromJson(response.data);
     } on DioError catch (e) {
       if (e.response != null && e.response!.statusCode == 400) {
         print(e.response!.data);

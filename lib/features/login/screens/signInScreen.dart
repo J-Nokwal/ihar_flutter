@@ -24,6 +24,8 @@ class SignInScreen extends StatelessWidget {
             print(state);
             state.whenOrNull(exception: (AppExceptions appExceptions) {
               ScaffoldMessenger.of(context).showSnackBar(AppSnackBars.withText(appExceptions.message.toString()));
+            }, completed: (s) {
+              getIt<AuthBloc>().add(const AuthEvent.checkAuth());
             });
           },
           child: Scaffold(

@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
+import 'dart:math';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ihar_flutter/core/injection.dart';
 import 'package:ihar_flutter/core/modals/postModal.dart';
 import 'package:ihar_flutter/features/common/loadingAnimation.dart';
+import 'package:ihar_flutter/features/common/snakbar.dart';
 import 'package:ihar_flutter/features/feed/bloc/feed_bloc/feed_bloc.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -20,67 +23,111 @@ class FeedTiles extends StatefulWidget {
 }
 
 class _FeedTilesState extends State<FeedTiles> {
-  List<PostModals> feedList = [];
   bool isLoading = true;
+  bool lastLoading = true;
+  bool blocEventinitiated = true;
+  // FeedBloc bloc = getIt<FeedBloc>();
+  @override
+  void initState() {
+    super.initState();
+    // widget.scrollController.addListener(_getMorePostsListner);
+    widget.scrollController.addListener(_onScroll);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => getIt<FeedBloc>()..add(FeedEvent.initiate()),
-      child: BlocListener<FeedBloc, FeedState>(
-        listener: (context, state) {
-          state.mapOrNull(loading: (s) {
-            // setState(() {
-            // isLoading = true;
-            // });
-          }, completed: (s) {
-            if (s.errorMessage != null) {
-            } else {
-              feedList.addAll(s.posts!);
-              setState(() {
-                isLoading = false;
-              });
-            }
-          });
-        },
-        child: Stack(
-          children: [
-            ListView.builder(
-                padding: (Device.width < 761)
-                    ? EdgeInsets.only(top: 70)
-                    : EdgeInsets.only(top: 70, left: (Device.width - 760) / 2, right: (Device.width) / 2 + 20),
-                itemCount: feedList.length,
-                controller: widget.scrollController,
-                itemBuilder: (context, index) {
-                  return _MobileFeedTiles(
-                      post: feedList[index],
-                      onLikeButtonPressed: (bool liked) {
-                        feedList[index].liked = !feedList[index].liked;
-                        return !liked;
-                      },
-                      onProfileOpen: () {},
-                      onCommentsopen: () {
-                        Navigator.of(context).pushNamed("/home/postComments", arguments: feedList[index]);
-                      },
-                      onShareButtonPressed: () {});
-                }),
-            if (isLoading) LoadingAnimation(),
-          ],
-        ),
-      ),
+    return BlocBuilder<FeedBloc, FeedState>(
+      builder: (context, state) {
+        feedEventStarted = false;
+        return state.map(
+            loadingAnimation: (s) => LoadingAnimation(),
+            loadingMore: (s) =>
+                _PostListView(feedList: s.posts, showLoader: true, scrollController: widget.scrollController),
+            completed: (s) =>
+                _PostListView(feedList: s.posts, showLoader: true, scrollController: widget.scrollController),
+            hasError: (s) =>
+                _PostListView(feedList: s.posts, showLoader: false, scrollController: widget.scrollController),
+            hasReachedMax: (s) {
+              widget.scrollController.removeListener(_onScroll);
+              return _PostListView(feedList: s.posts, showLoader: false, scrollController: widget.scrollController);
+            });
+      },
     );
+  }
+
+  bool feedEventStarted = false;
+  void _onScroll() {
+    if (!feedEventStarted && _isBottom) {
+      feedEventStarted = true;
+      context.read<FeedBloc>().add(FeedEvent.getPosts());
+    }
+  }
+
+  bool get _isBottom {
+    if (!widget.scrollController.hasClients) return false;
+    final maxScroll = widget.scrollController.position.maxScrollExtent;
+    final currentScroll = widget.scrollController.offset;
+    return currentScroll >= (maxScroll);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 }
 
-class _MobileFeedTiles extends StatelessWidget {
-  _MobileFeedTiles(
-      {Key? key,
-      required this.post,
-      required this.onLikeButtonPressed,
-      required this.onProfileOpen,
-      required this.onCommentsopen,
-      required this.onShareButtonPressed})
-      : super(key: key);
+class _PostListView extends StatelessWidget {
+  const _PostListView({
+    Key? key,
+    required this.showLoader,
+    required this.feedList,
+    required this.scrollController,
+  }) : super(key: key);
+
+  final bool showLoader;
+  final List<PostModals> feedList;
+  final ScrollController scrollController;
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+        padding: (Device.width < 761)
+            ? EdgeInsets.only(top: 70)
+            : EdgeInsets.only(top: 70, left: (Device.width - 760) / 2, right: (Device.width) / 2 + 20),
+        itemCount: (showLoader) ? feedList.length + 1 : feedList.length,
+        controller: scrollController,
+        itemBuilder: (context, index) {
+          if (showLoader && index == feedList.length) {
+            // context.read<FeedBloc>().add(FeedEvent.getPosts());
+            return LinearProgressIndicator();
+          }
+          return MobileFeedTiles(
+              post: feedList[index],
+              onLikeButtonPressed: (bool liked) {
+                feedList[index].liked = !feedList[index].liked;
+                return !liked;
+              },
+              onProfileOpen: () {},
+              onCommentsopen: () {
+                Navigator.of(context).pushNamed("/home/postComments", arguments: feedList[index]);
+              },
+              onShareButtonPressed: () {});
+        });
+  }
+}
+
+class MobileFeedTiles extends StatelessWidget {
+  MobileFeedTiles({
+    Key? key,
+    required this.post,
+    required this.onLikeButtonPressed,
+    required this.onProfileOpen,
+    required this.onCommentsopen,
+    required this.onShareButtonPressed,
+    this.showUser = true,
+  }) : super(key: key);
   PostModals post;
+  bool showUser;
   final bool Function(bool liked) onLikeButtonPressed;
   final void Function() onProfileOpen;
   final void Function() onCommentsopen;
@@ -95,27 +142,22 @@ class _MobileFeedTiles extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              const SizedBox(width: 10, height: 45),
-              CircleAvatar(
-                radius: 20,
-                backgroundColor: Theme.of(context).backgroundColor,
-              ),
-              const SizedBox(width: 10),
-              Text("${post.postFrom!.firstName!} ${post.postFrom!.lastName}",
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-              Expanded(child: Container()),
-              PopupMenuButton(itemBuilder: (context) {
-                return [
-                  PopupMenuItem(child: Text("share")),
-                  PopupMenuItem(child: Text("link")),
-                  PopupMenuItem(child: Text("report")),
-                ];
-              }),
-              const SizedBox(width: 10),
-            ],
-          ),
+          if (showUser)
+            Row(
+              children: [
+                const SizedBox(width: 10, height: 45),
+                CircleAvatar(
+                  radius: 20,
+                  backgroundColor: Theme.of(context).backgroundColor,
+                ),
+                const SizedBox(width: 10),
+                Text("${post.postFrom!.firstName!} ${post.postFrom!.lastName}",
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                Expanded(child: Container()),
+                menu(),
+                const SizedBox(width: 10),
+              ],
+            ),
           // Image.network(
           //   post.post_photo_link,
           //   // width: double.infinity,
@@ -139,8 +181,13 @@ class _MobileFeedTiles extends StatelessWidget {
                 return Container(
                   width: double.infinity,
                   child: Center(
-                    child: CircularProgressIndicator(
-                      value: value,
+                    child: Container(
+                      height: 100,
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          value: value,
+                        ),
+                      ),
                     ),
                   ),
                 );
@@ -165,6 +212,9 @@ class _MobileFeedTiles extends StatelessWidget {
                     onLikeButtonPressed(true);
                   },
                   icon: const Icon(Icons.send, color: Colors.black54)),
+              Expanded(child: Container()),
+              if (!showUser) menu(),
+              const SizedBox(width: 10),
             ],
           ),
           Row(
@@ -227,6 +277,16 @@ class _MobileFeedTiles extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  PopupMenuButton<dynamic> menu() {
+    return PopupMenuButton(itemBuilder: (context) {
+      return [
+        PopupMenuItem(child: Text("share")),
+        PopupMenuItem(child: Text("link")),
+        PopupMenuItem(child: Text("report")),
+      ];
+    });
   }
 }
 
