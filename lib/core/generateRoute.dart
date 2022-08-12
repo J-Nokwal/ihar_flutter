@@ -18,7 +18,10 @@ class Routers {
       case '/signInScreen':
         return MaterialPageRoute(builder: (_) => SignInScreen());
       case '/home':
-        return MaterialPageRoute(builder: (_) => HomeScreen());
+        return MaterialPageRoute(
+            builder: (_) => HomeScreen(
+                  user: settings.arguments as UserModals,
+                ));
       case '/home/createPost':
         return MaterialPageRoute(builder: (_) => CreatePostScreen());
       case '/home/postComments':

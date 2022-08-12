@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ihar_flutter/core/injection.dart';
 import 'package:ihar_flutter/core/modals/userModal.dart';
 import 'package:ihar_flutter/core/requests/userRequests.dart';
+import 'package:ihar_flutter/features/common/userAvatarWidget.dart';
 import 'package:ihar_flutter/features/homeScreen/screens/Drawer.dart';
 import 'package:ihar_flutter/features/feed/screens/FeedTiles.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
@@ -15,12 +17,12 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../../core/firebase_classes/firebase_auth.dart';
 import '../../feed/bloc/feed_bloc/feed_bloc.dart';
-import '../../login/bloc/sign_in_screen_bloc/sign_in_screen_bloc.dart';
 
 class HomeScreen extends StatelessWidget {
-  HomeScreen({Key? key}) : super(key: key);
+  HomeScreen({Key? key, required this.user}) : super(key: key);
   ScrollController scrollController = ScrollController();
   FloatingSearchBarController floatingSearchBarController = FloatingSearchBarController();
+  final UserModals user;
   @override
   Widget build(BuildContext context) {
     return ResponsiveSizer(
@@ -44,13 +46,25 @@ class HomeScreen extends StatelessWidget {
         statusBarIconBrightness: Brightness.dark,
         systemNavigationBarColor: Colors.white,
       ));
-      return Scaffold(
-        drawer: (Device.screenType == ScreenType.mobile) ? Drawer(child: AppDrawer()) : null,
-        body: SearchBar(
-          floatingSearchBarController: floatingSearchBarController,
-          scrollController: scrollController,
-          child:
-              _HomeBody(floatingSearchBarController: floatingSearchBarController, scrollController: scrollController),
+      return RepositoryProvider(
+        create: (context) => user,
+        child: WillPopScope(
+          onWillPop: () async {
+            int a = 0;
+            if (Platform.isAndroid) {
+              SystemNavigator.pop();
+            }
+            return true;
+          },
+          child: Scaffold(
+            drawer: (Device.screenType == ScreenType.mobile) ? Drawer(child: AppDrawer()) : null,
+            body: SearchBar(
+              floatingSearchBarController: floatingSearchBarController,
+              scrollController: scrollController,
+              child: _HomeBody(
+                  floatingSearchBarController: floatingSearchBarController, scrollController: scrollController),
+            ),
+          ),
         ),
       );
     });
@@ -231,6 +245,7 @@ class __HomeBodyState extends State<_HomeBody> {
     }
     ScrollController scrollController = widget.scrollController;
     Size size = MediaQuery.of(context).size;
+    UserModals user = RepositoryProvider.of<UserModals>(context);
     return SafeArea(
       child: Stack(
         children: [
@@ -367,20 +382,15 @@ class __HomeBodyState extends State<_HomeBody> {
                           }),
                     const SizedBox(width: 10),
                     InkWell(
-                      onTap: () async {
-                        final appAuth = getIt<AppAuth>();
-                        UserModals? user = appAuth.userModal;
-                        if (user == null) {
-                          appAuth.userModal = await UsersRequests.getUser(getIt<Dio>(),
-                              id: appAuth.firebaseAuthInstance.currentUser!.uid);
-                          user = appAuth.userModal;
-                        }
-                        Navigator.of(context).pushNamed("/home/user", arguments: [user, appAuth]);
-                      },
-                      child: CircleAvatar(
-                        backgroundColor: Theme.of(context).backgroundColor,
-                      ),
-                    ),
+                        onTap: () async {
+                          final appAuth = getIt<AppAuth>();
+
+                          Navigator.of(context).pushNamed("/home/user", arguments: [user, appAuth]);
+                        },
+                        child: AppUserAvatar(
+                          userModals: user,
+                          size: 40,
+                        )),
                     const SizedBox(width: 20),
                   ],
                 ),

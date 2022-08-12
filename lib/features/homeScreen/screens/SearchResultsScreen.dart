@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -9,9 +10,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterfire_ui/auth.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:horizontal_card_pager/horizontal_card_pager.dart';
+import 'package:ihar_flutter/core/firebase_classes/firebase_auth.dart';
 import 'package:ihar_flutter/core/injection.dart';
 import 'package:ihar_flutter/core/modals/searchResultModal.dart';
 import 'package:ihar_flutter/features/common/loadingAnimation.dart';
+import 'package:ihar_flutter/features/common/userAvatarWidget.dart';
 import 'package:ihar_flutter/features/homeScreen/bloc/search_bloc.dart/search_bloc.dart';
 import 'package:octo_image/octo_image.dart';
 
@@ -31,7 +34,7 @@ class SearchResultScreen extends StatelessWidget {
           title: Text("Search: $query", style: const TextStyle(color: Colors.black54)),
           leading: IconButton(
               icon: const Icon(
-                Icons.close_rounded,
+                Icons.arrow_back_rounded,
                 color: Colors.black,
               ),
               onPressed: () {
@@ -70,48 +73,61 @@ class _ShowResult extends StatelessWidget {
           ),
         if (searchResultModal.users.isNotEmpty)
           SizedBox(
-            height: 250,
+            height: 225,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: searchResultModal.users.length,
               itemBuilder: (context, index) {
-                return SizedBox(
-                  width: 200,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 2, 1, 2),
-                    child: Material(
-                      elevation: 3,
-                      borderRadius: BorderRadius.circular(15),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            const SizedBox(height: 15),
-                            CircleAvatar(
-                              backgroundColor: Colors.primaries[Random().nextInt(Colors.primaries.length)],
-                              minRadius: 60,
-                              foregroundImage: (searchResultModal.users[index].profilePhotoLink != "")
-                                  ? NetworkImage(searchResultModal.users[index].profileLink!)
-                                  : null,
-                              child: (searchResultModal.users[index].profilePhotoLink == "")
-                                  ? Text(
-                                      searchResultModal.users[index].userId[0].toUpperCase(),
-                                      textScaleFactor: 2.5,
-                                    )
-                                  : null,
-                            ),
-                            const SizedBox(height: 10),
-                            Text(searchResultModal.users[index].userId),
-                            if (searchResultModal.users[index].lastName != "") const SizedBox(height: 10),
-                            if (searchResultModal.users[index].lastName != "")
-                              Text(searchResultModal.users[index].userId),
-                            const SizedBox(height: 10),
-                            Text(
-                              searchResultModal.users[index].userId * 10,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
+                return InkWell(
+                  onTap: () {
+                    Navigator.of(context)
+                        .pushNamed("/home/user", arguments: [searchResultModal.users[index], getIt<AppAuth>()]);
+                  },
+                  child: SizedBox(
+                    width: 200,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 2, 1, 2),
+                      child: Material(
+                        elevation: 3,
+                        borderRadius: BorderRadius.circular(15),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 10),
+                              AppUserAvatar(userModals: searchResultModal.users[index], size: 120),
+                              // CircleAvatar(
+                              //   backgroundColor: Colors.primaries[Random().nextInt(Colors.primaries.length)],
+                              //   minRadius: 60,
+                              //   foregroundImage: (searchResultModal.users[index].profilePhotoLink != "")
+                              //       ? NetworkImage(searchResultModal.users[index].profileLink!)
+                              //       : null,
+                              //   child: (searchResultModal.users[index].profilePhotoLink == "")
+                              //       ? Text(
+                              //           searchResultModal.users[index].userId[0].toUpperCase(),
+                              //           textScaleFactor: 2.5,
+                              //         )
+                              //       : null,
+                              // ),
+                              const SizedBox(height: 10),
+                              SizedBox(
+                                height: 40,
+                                child: Text(
+                                  "${searchResultModal.users[index].firstName} ${searchResultModal.users[index].lastName}",
+                                  maxLines: 2,
+                                  textAlign: TextAlign.center,
+                                  overflow: TextOverflow.fade,
+                                ),
+                              ),
+                              // const SizedBox(height: 10),
+                              Text(
+                                searchResultModal.users[index].userId,
+                                maxLines: 1,
+                                textScaleFactor: 0.7,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -127,11 +143,11 @@ class _ShowResult extends StatelessWidget {
           ),
         ...searchResultModal.posts.map((e) => MobileFeedTiles(
             post: e,
-            onLikeButtonPressed: (s) {
+            onLikeButtonPressed: (s) async {
               return s;
             },
             onProfileOpen: () {},
-            onCommentsopen: () {},
+            onCommentsopen: () async {},
             onShareButtonPressed: () {}))
       ],
     );

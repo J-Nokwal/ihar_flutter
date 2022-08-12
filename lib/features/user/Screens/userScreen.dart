@@ -14,6 +14,7 @@ import 'package:ihar_flutter/features/feed/screens/FeedTiles.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
+import '../../common/userAvatarWidget.dart';
 import '../user_screen_bloc/user_screen_bloc.dart';
 
 class UserScreen extends StatefulWidget {
@@ -87,14 +88,15 @@ class _UserScreenState extends State<UserScreen> with SingleTickerProviderStateM
                         CircleAvatar(
                           backgroundColor: profileColor,
                           minRadius: 40,
-                          foregroundImage:
-                              (widget.user.profilePhotoLink != "") ? NetworkImage(widget.user.profileLink!) : null,
+                          maxRadius: 40,
+                          // foregroundImage:
+                          //     (widget.user.profilePhotoLink != "") ? NetworkImage(widget.user.profilePhotoLink) : null,
                           child: (widget.user.profilePhotoLink == "")
                               ? Text(
                                   widget.user.userId[0].toUpperCase(),
                                   textScaleFactor: 2.5,
                                 )
-                              : null,
+                              : AppUserAvatar(userModals: widget.user, size: 80),
                         ),
                         const SizedBox(width: 20),
                         Expanded(
@@ -222,11 +224,11 @@ class _UserPostsWidget extends StatelessWidget {
         return MobileFeedTiles(
             showUser: false,
             post: posts[index],
-            onLikeButtonPressed: (a) {
+            onLikeButtonPressed: (a) async {
               return a;
             },
             onProfileOpen: () {},
-            onCommentsopen: () {},
+            onCommentsopen: () async {},
             onShareButtonPressed: () {});
       },
     );

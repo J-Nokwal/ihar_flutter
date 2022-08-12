@@ -4,16 +4,23 @@ import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ihar_flutter/core/injection.dart';
 import 'package:ihar_flutter/core/modals/postModal.dart';
 import 'package:ihar_flutter/features/common/loadingAnimation.dart';
 import 'package:ihar_flutter/features/common/snakbar.dart';
+import 'package:ihar_flutter/features/common/userAvatarWidget.dart';
 import 'package:ihar_flutter/features/feed/bloc/feed_bloc/feed_bloc.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+
+import '../../../core/firebase_classes/firebase_auth.dart';
+import '../../../core/modals/likePostModal.dart';
+import '../../../core/requests/likesRequests.dart';
 
 class FeedTiles extends StatefulWidget {
   const FeedTiles({Key? key, required this.scrollController}) : super(key: key);
@@ -41,18 +48,27 @@ class _FeedTilesState extends State<FeedTiles> {
         feedEventStarted = false;
         return state.map(
             loadingAnimation: (s) => LoadingAnimation(),
-            loadingMore: (s) =>
-                _PostListView(feedList: s.posts, showLoader: true, scrollController: widget.scrollController),
-            completed: (s) =>
-                _PostListView(feedList: s.posts, showLoader: true, scrollController: widget.scrollController),
-            hasError: (s) =>
-                _PostListView(feedList: s.posts, showLoader: false, scrollController: widget.scrollController),
+            loadingMore: (s) => _PostListView(
+                feedList: s.posts, showLoader: true, scrollController: widget.scrollController, onRefresh: onRefresh),
+            completed: (s) => _PostListView(
+                feedList: s.posts, showLoader: true, scrollController: widget.scrollController, onRefresh: onRefresh),
+            hasError: (s) => _PostListView(
+                feedList: s.posts, showLoader: false, scrollController: widget.scrollController, onRefresh: onRefresh),
             hasReachedMax: (s) {
-              widget.scrollController.removeListener(_onScroll);
-              return _PostListView(feedList: s.posts, showLoader: false, scrollController: widget.scrollController);
+              // widget.scrollController.removeListener(_onScroll);
+              return _PostListView(
+                  feedList: s.posts,
+                  showLoader: false,
+                  scrollController: widget.scrollController,
+                  onRefresh: onRefresh);
             });
       },
     );
+  }
+
+  Future<void> onRefresh() async {
+    print("refresed");
+    BlocProvider.of<FeedBloc>(context).add(FeedEvent.getPosts(isRefreshed: true));
   }
 
   bool feedEventStarted = false;
@@ -64,6 +80,7 @@ class _FeedTilesState extends State<FeedTiles> {
   }
 
   bool get _isBottom {
+    print(widget.scrollController.offset);
     if (!widget.scrollController.hasClients) return false;
     final maxScroll = widget.scrollController.position.maxScrollExtent;
     final currentScroll = widget.scrollController.offset;
@@ -78,41 +95,68 @@ class _FeedTilesState extends State<FeedTiles> {
 }
 
 class _PostListView extends StatelessWidget {
-  const _PostListView({
+  _PostListView({
     Key? key,
     required this.showLoader,
     required this.feedList,
     required this.scrollController,
+    required this.onRefresh,
   }) : super(key: key);
 
   final bool showLoader;
   final List<PostModals> feedList;
   final ScrollController scrollController;
+  final Future<void> Function() onRefresh;
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        padding: (Device.width < 761)
-            ? EdgeInsets.only(top: 70)
-            : EdgeInsets.only(top: 70, left: (Device.width - 760) / 2, right: (Device.width) / 2 + 20),
-        itemCount: (showLoader) ? feedList.length + 1 : feedList.length,
-        controller: scrollController,
-        itemBuilder: (context, index) {
-          if (showLoader && index == feedList.length) {
-            // context.read<FeedBloc>().add(FeedEvent.getPosts());
-            return LinearProgressIndicator();
-          }
-          return MobileFeedTiles(
-              post: feedList[index],
-              onLikeButtonPressed: (bool liked) {
-                feedList[index].liked = !feedList[index].liked;
-                return !liked;
-              },
-              onProfileOpen: () {},
-              onCommentsopen: () {
-                Navigator.of(context).pushNamed("/home/postComments", arguments: feedList[index]);
-              },
-              onShareButtonPressed: () {});
-        });
+    return RefreshIndicator(
+      onRefresh: () async {
+        await onRefresh();
+      },
+      child: ListView.builder(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: (Device.width < 761)
+              ? EdgeInsets.only(top: 70)
+              : EdgeInsets.only(top: 70, left: (Device.width - 760) / 2, right: (Device.width) / 2 + 20),
+          itemCount: (showLoader) ? feedList.length + 1 : feedList.length,
+          controller: scrollController,
+          itemBuilder: (context, index) {
+            if (showLoader && index == feedList.length) {
+              // context.read<FeedBloc>().add(FeedEvent.getPosts());
+              return LinearProgressIndicator();
+            }
+            return MobileFeedTiles(
+                post: feedList[index],
+                onLikeButtonPressed: (bool liked) async {
+                  feedList[index].liked = !feedList[index].liked;
+                  final l = await LikesRequests.triggerLike(getIt<Dio>(),
+                      likePostModal: LikePostModal(
+                          likedBy: getIt<AppAuth>().firebaseAuthInstance.currentUser!.uid,
+                          postId: feedList[index].id!));
+                  return l;
+                },
+                onProfileOpen: () {},
+                onCommentsopen: () async {
+                  await Navigator.of(context).pushNamed("/home/postComments", arguments: feedList[index]);
+                },
+                onShareButtonPressed: () {});
+          }),
+    );
+  }
+
+  bool feedEventStarted = false;
+  void _onScroll(context) {
+    if (!feedEventStarted && _isBottom) {
+      feedEventStarted = true;
+      context.read<FeedBloc>().add(FeedEvent.getPosts());
+    }
+  }
+
+  bool get _isBottom {
+    if (!scrollController.hasClients) return false;
+    final maxScroll = scrollController.position.maxScrollExtent;
+    final currentScroll = scrollController.offset;
+    return currentScroll >= (maxScroll);
   }
 }
 
@@ -128,9 +172,9 @@ class MobileFeedTiles extends StatelessWidget {
   }) : super(key: key);
   PostModals post;
   bool showUser;
-  final bool Function(bool liked) onLikeButtonPressed;
+  final Future<bool> Function(bool liked) onLikeButtonPressed;
   final void Function() onProfileOpen;
-  final void Function() onCommentsopen;
+  final Future<void> Function() onCommentsopen;
   final void Function() onShareButtonPressed;
 
   //  final VoidCallback callback(int);
@@ -146,10 +190,17 @@ class MobileFeedTiles extends StatelessWidget {
             Row(
               children: [
                 const SizedBox(width: 10, height: 45),
-                CircleAvatar(
-                  radius: 20,
-                  backgroundColor: Theme.of(context).backgroundColor,
-                ),
+                if (post.postFrom!.profilePhotoLink == "")
+                  CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Theme.of(context).backgroundColor,
+                  ),
+                if (post.postFrom!.profilePhotoLink != "")
+                  InkWell(
+                      onTap: () {
+                        Navigator.of(context).pushNamed("/home/user", arguments: [post.postFrom!, getIt<AppAuth>()]);
+                      },
+                      child: AppUserAvatar(userModals: post.postFrom!, size: 40)),
                 const SizedBox(width: 10),
                 Text("${post.postFrom!.firstName!} ${post.postFrom!.lastName}",
                     style: TextStyle(fontWeight: FontWeight.bold)),
@@ -203,13 +254,13 @@ class MobileFeedTiles extends StatelessWidget {
                   },
                   isLiked: post.liked),
               IconButton(
-                  onPressed: () {
-                    onCommentsopen();
+                  onPressed: () async {
+                    await onCommentsopen();
                   },
                   icon: const Icon(Icons.comment, color: Colors.black54)),
               IconButton(
                   onPressed: () {
-                    onLikeButtonPressed(true);
+                    // onLikeButtonPressed(true);
                   },
                   icon: const Icon(Icons.send, color: Colors.black54)),
               Expanded(child: Container()),
@@ -327,14 +378,4 @@ class _LikeState extends State<Like> {
         icon: Icon(((isLiked) ? Icons.favorite : Icons.favorite_border),
             color: (isLiked) ? Colors.redAccent : Colors.grey[850]));
   }
-}
-
-class TempPost {
-  final String message;
-  bool liked;
-  int likes;
-  final String post_photo_link;
-  final String posting_User;
-
-  TempPost(this.message, this.liked, this.post_photo_link, this.posting_User, this.likes);
 }

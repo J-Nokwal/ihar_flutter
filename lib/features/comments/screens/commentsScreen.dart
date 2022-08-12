@@ -1,10 +1,15 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:ihar_flutter/core/modals/postModal.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
+import '../../../core/firebase_classes/firebase_auth.dart';
+import '../../../core/injection.dart';
+import '../../../core/modals/likePostModal.dart';
+import '../../../core/requests/likesRequests.dart';
 import '../../feed/screens/FeedTiles.dart';
 
 class CommentsScreen extends StatelessWidget {
@@ -90,7 +95,11 @@ class CommentsScreen extends StatelessWidget {
                       const SizedBox(width: 10, height: 45),
                       // _Likebutton(),
                       Like(
-                          onLikeButtonPressed: (b) {
+                          onLikeButtonPressed: (b) async {
+                            post.liked = !post.liked;
+                            final l = await LikesRequests.triggerLike(getIt<Dio>(),
+                                likePostModal: LikePostModal(
+                                    likedBy: getIt<AppAuth>().firebaseAuthInstance.currentUser!.uid, postId: post.id!));
                             // onLikeButtonPressed(b);
                           },
                           isLiked: post.liked),

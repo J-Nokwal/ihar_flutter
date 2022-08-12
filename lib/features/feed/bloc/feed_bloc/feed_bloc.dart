@@ -23,6 +23,12 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     on<FeedEvent>((event, emit) async {
       await event.map(
         getPosts: (_GetPosts event) async {
+          if (event.isRefreshed) {
+            postList = [];
+            pageId = 0;
+            noOfPages = 1;
+            queryTime = null;
+          }
           if (postList.isEmpty) {
             emit(const _LoadingAnimation());
           } else {
@@ -33,6 +39,9 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
           // }
           // await Future.delayed(Duration(seconds: 5));
           try {
+            if (pageId >= noOfPages) {
+              emit(_HasReachedMax(posts: postList));
+            }
             if (pageId == 0) {
               GetPostByPageIdModal postByPageIdModal =
                   await PostsRequests.getPostByPageIdByUser(dio, byUser: appAuth.firebaseAuthInstance.currentUser!.uid);

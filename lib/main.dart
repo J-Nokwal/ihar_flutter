@@ -1,13 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ihar_flutter/core/generateRoute.dart';
-import 'package:ihar_flutter/core/requests/userRequests.dart';
 import 'core/bloc/auth_ bloc/auth_bloc.dart';
+import 'core/deepLinksService.dart';
 import 'core/injection.dart';
 import 'firebase_options.dart';
 
@@ -16,7 +15,7 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   // await Firebase.initializeApp();
   configureDependencies();
-  // await getIt<DynamicLinkService>().handleDynamicLinks();
+  await getIt<DynamicLinkService>().handleDynamicLinks();
 
   runApp(MyApp());
 }
@@ -59,18 +58,18 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
     return Builder(builder: (context) {
       return BlocProvider(
-        create: (context) => authBloc,
+        create: (context) => authBloc..add(AuthEvent.checkAuth()),
         child: BlocListener<AuthBloc, AuthState>(
           listener: (context, state) {
-            state.map(loading: (_) {
+            state.mapOrNull(loading: (_) {
               // return Navigator.of(context).pushReplacementNamed("/splashScreen");
             }, signedin: (s) {
               print("signed in state in listner");
-              return _navigator.currentState?.pushNamedAndRemoveUntil("/home", ((route) => route.isFirst));
+              return _navigator.currentState
+                  ?.pushNamedAndRemoveUntil("/home", ((route) => route.isFirst), arguments: s.user);
             }, signedOut: (_) {
               print("signed out  state in listner");
-
-              return _navigator.currentState?.pushNamed("/signInScreen");
+              return _navigator.currentState?.pushNamedAndRemoveUntil("/signInScreen", ((route) => route.isFirst));
               // return _navigator.currentState?.pushNamedAndRemoveUntil("/signInScreen", ((route) => route.isFirst));
             });
           },

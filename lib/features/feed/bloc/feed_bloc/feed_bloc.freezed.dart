@@ -16,19 +16,20 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$FeedEvent {
+  bool get isRefreshed => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() getPosts,
+    required TResult Function(bool isRefreshed) getPosts,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? getPosts,
+    TResult Function(bool isRefreshed)? getPosts,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? getPosts,
+    TResult Function(bool isRefreshed)? getPosts,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -48,12 +49,17 @@ mixin _$FeedEvent {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $FeedEventCopyWith<FeedEvent> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $FeedEventCopyWith<$Res> {
   factory $FeedEventCopyWith(FeedEvent value, $Res Function(FeedEvent) then) =
       _$FeedEventCopyWithImpl<$Res>;
+  $Res call({bool isRefreshed});
 }
 
 /// @nodoc
@@ -63,13 +69,27 @@ class _$FeedEventCopyWithImpl<$Res> implements $FeedEventCopyWith<$Res> {
   final FeedEvent _value;
   // ignore: unused_field
   final $Res Function(FeedEvent) _then;
+
+  @override
+  $Res call({
+    Object? isRefreshed = freezed,
+  }) {
+    return _then(_value.copyWith(
+      isRefreshed: isRefreshed == freezed
+          ? _value.isRefreshed
+          : isRefreshed // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
 }
 
 /// @nodoc
-abstract class _$$_GetPostsCopyWith<$Res> {
+abstract class _$$_GetPostsCopyWith<$Res> implements $FeedEventCopyWith<$Res> {
   factory _$$_GetPostsCopyWith(
           _$_GetPosts value, $Res Function(_$_GetPosts) then) =
       __$$_GetPostsCopyWithImpl<$Res>;
+  @override
+  $Res call({bool isRefreshed});
 }
 
 /// @nodoc
@@ -81,51 +101,76 @@ class __$$_GetPostsCopyWithImpl<$Res> extends _$FeedEventCopyWithImpl<$Res>
 
   @override
   _$_GetPosts get _value => super._value as _$_GetPosts;
+
+  @override
+  $Res call({
+    Object? isRefreshed = freezed,
+  }) {
+    return _then(_$_GetPosts(
+      isRefreshed: isRefreshed == freezed
+          ? _value.isRefreshed
+          : isRefreshed // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
 }
 
 /// @nodoc
 
 class _$_GetPosts implements _GetPosts {
-  const _$_GetPosts();
+  const _$_GetPosts({this.isRefreshed = false});
+
+  @override
+  @JsonKey()
+  final bool isRefreshed;
 
   @override
   String toString() {
-    return 'FeedEvent.getPosts()';
+    return 'FeedEvent.getPosts(isRefreshed: $isRefreshed)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_GetPosts);
+        (other.runtimeType == runtimeType &&
+            other is _$_GetPosts &&
+            const DeepCollectionEquality()
+                .equals(other.isRefreshed, isRefreshed));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(isRefreshed));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_GetPostsCopyWith<_$_GetPosts> get copyWith =>
+      __$$_GetPostsCopyWithImpl<_$_GetPosts>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() getPosts,
+    required TResult Function(bool isRefreshed) getPosts,
   }) {
-    return getPosts();
+    return getPosts(isRefreshed);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? getPosts,
+    TResult Function(bool isRefreshed)? getPosts,
   }) {
-    return getPosts?.call();
+    return getPosts?.call(isRefreshed);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? getPosts,
+    TResult Function(bool isRefreshed)? getPosts,
     required TResult orElse(),
   }) {
     if (getPosts != null) {
-      return getPosts();
+      return getPosts(isRefreshed);
     }
     return orElse();
   }
@@ -160,7 +205,14 @@ class _$_GetPosts implements _GetPosts {
 }
 
 abstract class _GetPosts implements FeedEvent {
-  const factory _GetPosts() = _$_GetPosts;
+  const factory _GetPosts({final bool isRefreshed}) = _$_GetPosts;
+
+  @override
+  bool get isRefreshed;
+  @override
+  @JsonKey(ignore: true)
+  _$$_GetPostsCopyWith<_$_GetPosts> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
