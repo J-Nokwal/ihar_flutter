@@ -28,8 +28,8 @@ abstract class RegisterModulesss {
       // return Dio(BaseOptions(baseUrl: "https://localhost:8080"));
     }
     if (Platform.isAndroid) {
-      // return Dio(BaseOptions(baseUrl: "http://172.16.40.113:8080", responseType: ResponseType.plain));
-      return Dio(BaseOptions(baseUrl: "http://192.168.18.184:8080", responseType: ResponseType.plain));
+      return Dio(BaseOptions(baseUrl: "http://20.29.16.252", responseType: ResponseType.plain));
+      // return Dio(BaseOptions(baseUrl: "http://192.168.18.184:8080", responseType: ResponseType.plain));
     }
 
     return Dio(BaseOptions(baseUrl: "localhost:8080"));

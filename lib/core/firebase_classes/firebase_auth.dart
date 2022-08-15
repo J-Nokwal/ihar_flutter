@@ -46,6 +46,8 @@ class AppAuth {
     } on FirebaseAuthException catch (e) {
       print(e);
       throw AppExceptions.appAuthException(message: "Error while siging with google", e: e);
+    } on AppExceptions {
+      rethrow;
     } on Exception catch (e) {
       throw AppExceptions.appAuthException(message: "Error while siging with google", e: e);
     }
@@ -60,30 +62,51 @@ class AppAuth {
         .then((value) => print('Successfully sent email verification to $emailAuth with acc=${acs.url}'));
   }
 
-  Future signUpWithEmail({emailAddress = "jagritnokwal9@gmail.com", password = "qwer1234"}) async {
+  Future<UserCredential> signUpWithEmail({required String emailAddress, required String password}) async {
+    UserCredential? credential;
     try {
-      final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      credential = await firebaseAuthInstance.createUserWithEmailAndPassword(
         email: emailAddress,
         password: password,
       );
-      userCredential = credential;
-      return credential;
+      // firebaseAuthInstance;
+
+      if (credential.user != null) {
+        print("is new user : ${credential.additionalUserInfo!.isNewUser}");
+        credential.user!.sendEmailVerification();
+        return credential;
+      } else {
+        throw AppExceptions.appAuthException(message: "cant sent verification message");
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         throw AppExceptions.appAuthException(message: "The password provided is too weak", e: e);
       } else if (e.code == 'email-already-in-use') {
-        throw AppExceptions.appAuthException(message: "The account already exists for that email", e: e);
+        if (credential?.user != null) {
+          credential?.user?.sendEmailVerification();
+          // throw AppExceptions.appAuthException(message: "Verification Email Sent", e: e);
+          return credential!;
+        } else {
+          throw AppExceptions.appAuthException(message: "Verification Email already sent.");
+        }
+      } else {
+        throw AppExceptions.appAuthException(message: e.message);
       }
+    } on AppExceptions {
+      rethrow;
     } catch (e) {
       print(e);
       throw AppExceptions.appAuthException(message: "Error while creating account");
     }
   }
 
-  Future<UserCredential> signInWithEmail({emailAddress = "jagritnokwal9@gmail.com", password = "qwer1234"}) async {
+  Future<UserCredential> signInWithEmail({required String emailAddress, required String password}) async {
     try {
       final credential =
           await FirebaseAuth.instance.signInWithEmailAndPassword(email: emailAddress, password: password);
+      if (!credential.user!.emailVerified) {
+        throw AppExceptions(message: "Email Not Verified");
+      }
       userCredential = credential;
       return credential;
     } on FirebaseAuthException catch (e) {
@@ -92,11 +115,13 @@ class AppAuth {
         throw AppExceptions.appAuthException(message: "No user found for that email.", e: e);
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided for that user.');
-        throw AppExceptions.appAuthException(message: "Wrong password provided for that user.", e: e);
+        throw AppExceptions.appAuthException(message: "Wrong password provided", e: e);
       } else {
         print(e);
         throw AppExceptions.appAuthException(message: "Error while siging", e: e);
       }
+    } on AppExceptions {
+      rethrow;
     } catch (e) {
       print(e);
       throw AppExceptions.appAuthException(message: "Error while siging");

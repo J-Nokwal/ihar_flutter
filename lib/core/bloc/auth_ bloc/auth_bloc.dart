@@ -7,6 +7,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:ihar_flutter/core/firebase_classes/firebase_auth.dart';
 import 'package:ihar_flutter/core/firebase_classes/firebase_storage.dart';
+import 'package:ihar_flutter/core/requests/isSeserOnline.request.dart';
+import 'package:ihar_flutter/core/requests/requestUtils.dart';
 import 'package:ihar_flutter/core/requests/userRequests.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
@@ -41,9 +43,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
 
     on<AuthEvent>((event, emit) async {
+      if (!await hasNetwork()) {
+        emit(_Exception(appExceptions: AppExceptions.noInternetException()));
+        return;
+      }
+      if (!await IsServerOnlineRequest.check(dio)) {
+        emit(_Exception(appExceptions: AppExceptions.serverNotOnlie()));
+        return;
+      }
       await event.map(checkAuth: (_CheckAuth _checkAuth) async {
         // appAuth.signOut();
         emit(const _Loading());
+
         if (appAuth.isAuthenticated) {
           // ignore: avoid_print, prefer_interpolation_to_compose_strings
           print("asdsssss " + appAuth.firebaseAuthInstance.currentUser!.displayName.toString());
@@ -78,7 +89,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
                 email: userCredential.user!.email,
                 profilePhotoLink: userCredential.user!.photoURL ?? profileLink!,
                 isAnaoymous: false);
-            user = await UsersRequests.createUser(dio, user: userModals);
+            user = await UsersRequests.createUser(
+              dio,
+              user: userModals,
+            );
             // createUserRequest(userModals);
           } else {
             user = await UsersRequests.getUser(dio, id: userCredential.user!.uid);
@@ -87,13 +101,49 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           emit(_Signedin(sudentsInformationGet: appAuth, user: user));
           addStream();
         } on AppExceptions catch (appExceptions) {
+          appAuth.signOut();
           emit(_Exception(appExceptions: appExceptions));
           // addError(appExceptions, e);
         }
-      }, signInWithEmail: (_SignInWithEmail event) {
+      }, signInWithEmail: (_SignInWithEmail event) async {
         emit(const _Loading());
-
-        // emit( _Completed());
+        try {
+          UserCredential userCredential =
+              await appAuth.signInWithEmail(emailAddress: event.email, password: event.password);
+          UserModals user;
+          String? profileLink;
+          // if (userCredential.additionalUserInfo!.isNewUser) {
+          //   if (userCredential.user!.photoURL == null) {
+          //     final a = await AvatarGenerator.getNewAvatar(dio);
+          //     print(Directory.systemTemp.path);
+          //     final b = await File("${Directory.systemTemp.path}/profilepic.jpg").writeAsBytes(a);
+          //     final UploadReturn uploadReturn = await appFireBaseStorage.uploadProfilePic(b);
+          //     await uploadReturn.task;
+          //     profileLink = await uploadReturn.mountainsRef.getDownloadURL();
+          //     appAuth.updateUserData(profilePhoto: profileLink);
+          //   }
+          //   UserModals userModals = UserModals(
+          //       userId: userCredential.user!.uid.toString(),
+          //       firstName: userCredential.user!.displayName,
+          //       email: userCredential.user!.email,
+          //       profilePhotoLink: userCredential.user!.photoURL ?? profileLink!,
+          //       isAnaoymous: false);
+          //   user = await UsersRequests.createUser(
+          //     dio,
+          //     user: userModals,
+          //   );
+          //   // createUserRequest(userModals);
+          // } else {
+          user = await UsersRequests.getUser(dio, id: userCredential.user!.uid);
+          // getUserRequest(userCredential.user!.uid);
+          // }
+          emit(_Signedin(sudentsInformationGet: appAuth, user: user));
+          addStream();
+        } on AppExceptions catch (appExceptions) {
+          appAuth.signOut();
+          emit(_Exception(appExceptions: appExceptions));
+          // addError(appExceptions, e);
+        }
       }, signInAnonyously: (_SignInAnonyously event) async {
         emit(const _Loading());
         try {

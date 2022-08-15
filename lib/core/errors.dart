@@ -9,6 +9,10 @@ abstract class AppExceptions with _$AppExceptions, Exception {
   factory AppExceptions({String? message, Exception? e}) = _AppExceptions;
 
   factory AppExceptions.networkException({@Default("network Error") String? message, Exception? e}) = _networkException;
+  factory AppExceptions.noInternetException({@Default("No internet") String? message, Exception? e}) =
+      _noInternetException;
+  factory AppExceptions.serverNotOnlie({@Default("Server Not online") String? message, Exception? e}) = _ServerNotOnlie;
+
   factory AppExceptions.statusCodeNot200({String? message, Exception? e}) = _statusCodeNot200;
   factory AppExceptions.apiSendsErrorStatus({String? message, Exception? e}) = _apiSendsErrorStatus;
 

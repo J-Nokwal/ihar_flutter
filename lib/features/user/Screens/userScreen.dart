@@ -3,7 +3,9 @@
 import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ihar_flutter/core/deepLinksService.dart';
 import 'package:ihar_flutter/core/firebase_classes/firebase_auth.dart';
 import 'package:ihar_flutter/core/injection.dart';
 import 'package:ihar_flutter/core/modals/postModal.dart';
@@ -72,7 +74,13 @@ class _UserScreenState extends State<UserScreen> with SingleTickerProviderStateM
                         itemBuilder: (context) {
                           return [
                             if (widget.ownProfile) PopupMenuItem(child: Text("Edit User")),
-                            PopupMenuItem(child: Text("Copy profile link")),
+                            PopupMenuItem(
+                                onTap: () async {
+                                  final text = await getIt<DynamicLinkService>()
+                                      .createDynamicLink(false, DeepLinkType.userProfileLink, widget.user.userId);
+                                  Clipboard.setData(ClipboardData(text: text));
+                                },
+                                child: Text("Copy profile link")),
                             PopupMenuItem(child: Text("Share profile link")),
                             if (!widget.ownProfile) PopupMenuItem(child: Text("report user")),
                           ];
@@ -185,25 +193,23 @@ class _PostsGrid extends StatelessWidget {
           child: Container(
             color: index.isOdd ? Colors.white : Colors.black12,
             height: 100.0,
-            child: Center(
-              child: OctoImage(
-                fit: BoxFit.contain,
-                image: CachedNetworkImageProvider(posts[index].postPhotoLink!),
-                progressIndicatorBuilder: (context, progress) {
-                  double value = 0;
-                  if (progress != null && progress.expectedTotalBytes != null) {
-                    value = progress.cumulativeBytesLoaded / (progress.expectedTotalBytes!);
-                  }
-                  return Container(
-                    width: double.infinity,
-                    child: Center(
-                      child: CircularProgressIndicator(
-                        value: value,
-                      ),
+            child: OctoImage(
+              fit: BoxFit.cover,
+              image: CachedNetworkImageProvider(posts[index].postPhotoLink!),
+              progressIndicatorBuilder: (context, progress) {
+                double value = 0;
+                if (progress != null && progress.expectedTotalBytes != null) {
+                  value = progress.cumulativeBytesLoaded / (progress.expectedTotalBytes!);
+                }
+                return Container(
+                  width: double.infinity,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      value: value,
                     ),
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             ),
           ),
         );

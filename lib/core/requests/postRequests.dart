@@ -34,7 +34,7 @@ abstract class PostsRequests {
       if (!await hasNetwork()) {
         throw AppExceptions.networkException();
       }
-      final Response response = await dio.get('/user/$postId/$userId');
+      final Response response = await dio.get('/post/$postId/$userId');
       // print(response.data);
       return postModalsFromJson(response.data);
     } on DioError catch (e) {

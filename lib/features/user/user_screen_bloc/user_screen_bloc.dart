@@ -27,6 +27,8 @@ class UserScreenBloc extends Bloc<UserScreenEvent, UserScreenState> {
           emit(_Completed(noOfPosts: posts.length, posts: posts, gridPosts: gridPosts));
         } on AppExceptions catch (appExceptions) {
           emit(_OnError(message: appExceptions.message ?? "Error Occured while Fetching Posts"));
+        } on Exception {
+          emit(const _OnError(message: "Error Occured while Fetching Posts"));
         }
       });
     });

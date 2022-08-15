@@ -5,13 +5,14 @@ import 'package:ihar_flutter/core/requests/requestUtils.dart';
 import '../errors.dart';
 
 abstract class CommentsRequests {
-  static Future<void> createComment(Dio dio, {required CommentModal comment}) async {
+  static Future<CommentModal> createComment(Dio dio, {required CommentModal comment}) async {
     try {
       if (!await hasNetwork()) {
         throw AppExceptions.networkException();
       }
       final Response response = await dio.post('/comment', data: commentModalToJson(comment));
-      // print(response.data);
+      print(response.data);
+      return commentModalFromJson(response.data);
     } on DioError catch (e) {
       if (e.response != null && e.response!.statusCode == 400) {
         print(e.response!.data);

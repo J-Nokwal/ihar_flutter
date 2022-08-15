@@ -7,6 +7,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ihar_flutter/core/injection.dart';
@@ -18,6 +19,7 @@ import 'package:ihar_flutter/features/feed/bloc/feed_bloc/feed_bloc.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
+import '../../../core/deepLinksService.dart';
 import '../../../core/firebase_classes/firebase_auth.dart';
 import '../../../core/modals/likePostModal.dart';
 import '../../../core/requests/likesRequests.dart';
@@ -80,7 +82,6 @@ class _FeedTilesState extends State<FeedTiles> {
   }
 
   bool get _isBottom {
-    print(widget.scrollController.offset);
     if (!widget.scrollController.hasClients) return false;
     final maxScroll = widget.scrollController.position.maxScrollExtent;
     final currentScroll = widget.scrollController.offset;
@@ -334,7 +335,13 @@ class MobileFeedTiles extends StatelessWidget {
     return PopupMenuButton(itemBuilder: (context) {
       return [
         PopupMenuItem(child: Text("share")),
-        PopupMenuItem(child: Text("link")),
+        PopupMenuItem(
+            onTap: () async {
+              final text =
+                  await getIt<DynamicLinkService>().createDynamicLink(false, DeepLinkType.postLink, post.id.toString());
+              Clipboard.setData(ClipboardData(text: text));
+            },
+            child: Text("link")),
         PopupMenuItem(child: Text("report")),
       ];
     });

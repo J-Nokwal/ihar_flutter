@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:ihar_flutter/core/injection.dart';
 import 'package:ihar_flutter/core/modals/userModal.dart';
 import 'package:ihar_flutter/core/requests/userRequests.dart';
@@ -40,29 +41,31 @@ class HomeScreen extends StatelessWidget {
       //     body: _HomeBody(floatingSearchBarController: floatingSearchBarController, scrollController: scrollController),
       //   );
       // }
-      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarBrightness: Brightness.dark,
-        statusBarIconBrightness: Brightness.dark,
-        systemNavigationBarColor: Colors.white,
-      ));
-      return RepositoryProvider(
-        create: (context) => user,
-        child: WillPopScope(
-          onWillPop: () async {
-            int a = 0;
-            if (Platform.isAndroid) {
-              SystemNavigator.pop();
-            }
-            return true;
-          },
-          child: Scaffold(
-            drawer: (Device.screenType == ScreenType.mobile) ? Drawer(child: AppDrawer()) : null,
-            body: SearchBar(
-              floatingSearchBarController: floatingSearchBarController,
-              scrollController: scrollController,
-              child: _HomeBody(
-                  floatingSearchBarController: floatingSearchBarController, scrollController: scrollController),
+      // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      //   statusBarColor: Colors.transparent,
+      //   statusBarBrightness: Brightness.dark,
+      //   statusBarIconBrightness: Brightness.dark,
+      //   systemNavigationBarColor: Colors.white,
+      // ));
+      return AnnotatedRegion<SystemUiOverlayStyle>(
+        value: const SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarIconBrightness: Brightness.dark),
+        child: RepositoryProvider(
+          create: (context) => user,
+          child: WillPopScope(
+            onWillPop: () async {
+              if (Platform.isAndroid) {
+                SystemNavigator.pop();
+              }
+              return true;
+            },
+            child: Scaffold(
+              drawer: (Device.screenType == ScreenType.mobile) ? Drawer(child: AppDrawer()) : null,
+              body: SearchBar(
+                floatingSearchBarController: floatingSearchBarController,
+                scrollController: scrollController,
+                child: _HomeBody(
+                    floatingSearchBarController: floatingSearchBarController, scrollController: scrollController),
+              ),
             ),
           ),
         ),
@@ -366,8 +369,8 @@ class __HomeBodyState extends State<_HomeBody> {
                       ),
                     Container(
                         width: (Device.screenType == ScreenType.mobile) ? 130 : 200,
-                        child: Image.asset(
-                          "assets/imgaes/AppIconFlat@3x.png",
+                        child: SvgPicture.asset(
+                          "assets/imgaes/AppIconFlat.svg",
                           fit: BoxFit.fitWidth,
                         )),
                     Expanded(child: Container()),

@@ -20,20 +20,20 @@ class CommentModal {
     this.createdAt,
     this.updatedAt,
     this.deletedAt,
-    this.message,
-    this.postId,
     this.commentFrom,
-    this.userId,
+    required this.message,
+    required this.postId,
+    required this.userId,
   });
 
   int? id;
   DateTime? createdAt;
   DateTime? updatedAt;
   DateTime? deletedAt;
-  String? message;
-  int? postId;
+  String message;
+  int postId;
   UserModals? commentFrom;
-  String? userId;
+  String userId;
 
   factory CommentModal.fromJson(Map<String, dynamic> json) => CommentModal(
         id: json["ID"],

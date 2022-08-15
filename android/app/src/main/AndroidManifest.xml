@@ -31,7 +31,7 @@
     <category android:name="android.intent.category.DEFAULT"/>
     <category android:name="android.intent.category.BROWSABLE"/>
     <data
-        android:host="example.com"
+        android:host="iharflutter.page.link"
         android:scheme="https"/>
 </intent-filter>
         </activity>
@@ -41,4 +41,5 @@
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
+ <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>

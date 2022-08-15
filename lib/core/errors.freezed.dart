@@ -22,6 +22,9 @@ mixin _$AppExceptions {
   TResult when<TResult extends Object?>(
     TResult Function(String? message, Exception? e) $default, {
     required TResult Function(String? message, Exception? e) networkException,
+    required TResult Function(String? message, Exception? e)
+        noInternetException,
+    required TResult Function(String? message, Exception? e) serverNotOnlie,
     required TResult Function(String? message, Exception? e) statusCodeNot200,
     required TResult Function(String? message, Exception? e)
         apiSendsErrorStatus,
@@ -33,6 +36,8 @@ mixin _$AppExceptions {
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(String? message, Exception? e)? $default, {
     TResult Function(String? message, Exception? e)? networkException,
+    TResult Function(String? message, Exception? e)? noInternetException,
+    TResult Function(String? message, Exception? e)? serverNotOnlie,
     TResult Function(String? message, Exception? e)? statusCodeNot200,
     TResult Function(String? message, Exception? e)? apiSendsErrorStatus,
     TResult Function(String? message, Exception? e)? appAuthException,
@@ -43,6 +48,8 @@ mixin _$AppExceptions {
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(String? message, Exception? e)? $default, {
     TResult Function(String? message, Exception? e)? networkException,
+    TResult Function(String? message, Exception? e)? noInternetException,
+    TResult Function(String? message, Exception? e)? serverNotOnlie,
     TResult Function(String? message, Exception? e)? statusCodeNot200,
     TResult Function(String? message, Exception? e)? apiSendsErrorStatus,
     TResult Function(String? message, Exception? e)? appAuthException,
@@ -54,6 +61,8 @@ mixin _$AppExceptions {
   TResult map<TResult extends Object?>(
     TResult Function(_AppExceptions value) $default, {
     required TResult Function(_networkException value) networkException,
+    required TResult Function(_noInternetException value) noInternetException,
+    required TResult Function(_ServerNotOnlie value) serverNotOnlie,
     required TResult Function(_statusCodeNot200 value) statusCodeNot200,
     required TResult Function(_apiSendsErrorStatus value) apiSendsErrorStatus,
     required TResult Function(_appAuthException value) appAuthException,
@@ -64,6 +73,8 @@ mixin _$AppExceptions {
   TResult? mapOrNull<TResult extends Object?>(
     TResult Function(_AppExceptions value)? $default, {
     TResult Function(_networkException value)? networkException,
+    TResult Function(_noInternetException value)? noInternetException,
+    TResult Function(_ServerNotOnlie value)? serverNotOnlie,
     TResult Function(_statusCodeNot200 value)? statusCodeNot200,
     TResult Function(_apiSendsErrorStatus value)? apiSendsErrorStatus,
     TResult Function(_appAuthException value)? appAuthException,
@@ -74,6 +85,8 @@ mixin _$AppExceptions {
   TResult maybeMap<TResult extends Object?>(
     TResult Function(_AppExceptions value)? $default, {
     TResult Function(_networkException value)? networkException,
+    TResult Function(_noInternetException value)? noInternetException,
+    TResult Function(_ServerNotOnlie value)? serverNotOnlie,
     TResult Function(_statusCodeNot200 value)? statusCodeNot200,
     TResult Function(_apiSendsErrorStatus value)? apiSendsErrorStatus,
     TResult Function(_appAuthException value)? appAuthException,
@@ -201,6 +214,9 @@ class _$_AppExceptions implements _AppExceptions {
   TResult when<TResult extends Object?>(
     TResult Function(String? message, Exception? e) $default, {
     required TResult Function(String? message, Exception? e) networkException,
+    required TResult Function(String? message, Exception? e)
+        noInternetException,
+    required TResult Function(String? message, Exception? e) serverNotOnlie,
     required TResult Function(String? message, Exception? e) statusCodeNot200,
     required TResult Function(String? message, Exception? e)
         apiSendsErrorStatus,
@@ -215,6 +231,8 @@ class _$_AppExceptions implements _AppExceptions {
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(String? message, Exception? e)? $default, {
     TResult Function(String? message, Exception? e)? networkException,
+    TResult Function(String? message, Exception? e)? noInternetException,
+    TResult Function(String? message, Exception? e)? serverNotOnlie,
     TResult Function(String? message, Exception? e)? statusCodeNot200,
     TResult Function(String? message, Exception? e)? apiSendsErrorStatus,
     TResult Function(String? message, Exception? e)? appAuthException,
@@ -228,6 +246,8 @@ class _$_AppExceptions implements _AppExceptions {
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(String? message, Exception? e)? $default, {
     TResult Function(String? message, Exception? e)? networkException,
+    TResult Function(String? message, Exception? e)? noInternetException,
+    TResult Function(String? message, Exception? e)? serverNotOnlie,
     TResult Function(String? message, Exception? e)? statusCodeNot200,
     TResult Function(String? message, Exception? e)? apiSendsErrorStatus,
     TResult Function(String? message, Exception? e)? appAuthException,
@@ -245,6 +265,8 @@ class _$_AppExceptions implements _AppExceptions {
   TResult map<TResult extends Object?>(
     TResult Function(_AppExceptions value) $default, {
     required TResult Function(_networkException value) networkException,
+    required TResult Function(_noInternetException value) noInternetException,
+    required TResult Function(_ServerNotOnlie value) serverNotOnlie,
     required TResult Function(_statusCodeNot200 value) statusCodeNot200,
     required TResult Function(_apiSendsErrorStatus value) apiSendsErrorStatus,
     required TResult Function(_appAuthException value) appAuthException,
@@ -258,6 +280,8 @@ class _$_AppExceptions implements _AppExceptions {
   TResult? mapOrNull<TResult extends Object?>(
     TResult Function(_AppExceptions value)? $default, {
     TResult Function(_networkException value)? networkException,
+    TResult Function(_noInternetException value)? noInternetException,
+    TResult Function(_ServerNotOnlie value)? serverNotOnlie,
     TResult Function(_statusCodeNot200 value)? statusCodeNot200,
     TResult Function(_apiSendsErrorStatus value)? apiSendsErrorStatus,
     TResult Function(_appAuthException value)? appAuthException,
@@ -271,6 +295,8 @@ class _$_AppExceptions implements _AppExceptions {
   TResult maybeMap<TResult extends Object?>(
     TResult Function(_AppExceptions value)? $default, {
     TResult Function(_networkException value)? networkException,
+    TResult Function(_noInternetException value)? noInternetException,
+    TResult Function(_ServerNotOnlie value)? serverNotOnlie,
     TResult Function(_statusCodeNot200 value)? statusCodeNot200,
     TResult Function(_apiSendsErrorStatus value)? apiSendsErrorStatus,
     TResult Function(_appAuthException value)? appAuthException,
@@ -378,6 +404,9 @@ class _$_networkException implements _networkException {
   TResult when<TResult extends Object?>(
     TResult Function(String? message, Exception? e) $default, {
     required TResult Function(String? message, Exception? e) networkException,
+    required TResult Function(String? message, Exception? e)
+        noInternetException,
+    required TResult Function(String? message, Exception? e) serverNotOnlie,
     required TResult Function(String? message, Exception? e) statusCodeNot200,
     required TResult Function(String? message, Exception? e)
         apiSendsErrorStatus,
@@ -392,6 +421,8 @@ class _$_networkException implements _networkException {
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(String? message, Exception? e)? $default, {
     TResult Function(String? message, Exception? e)? networkException,
+    TResult Function(String? message, Exception? e)? noInternetException,
+    TResult Function(String? message, Exception? e)? serverNotOnlie,
     TResult Function(String? message, Exception? e)? statusCodeNot200,
     TResult Function(String? message, Exception? e)? apiSendsErrorStatus,
     TResult Function(String? message, Exception? e)? appAuthException,
@@ -405,6 +436,8 @@ class _$_networkException implements _networkException {
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(String? message, Exception? e)? $default, {
     TResult Function(String? message, Exception? e)? networkException,
+    TResult Function(String? message, Exception? e)? noInternetException,
+    TResult Function(String? message, Exception? e)? serverNotOnlie,
     TResult Function(String? message, Exception? e)? statusCodeNot200,
     TResult Function(String? message, Exception? e)? apiSendsErrorStatus,
     TResult Function(String? message, Exception? e)? appAuthException,
@@ -422,6 +455,8 @@ class _$_networkException implements _networkException {
   TResult map<TResult extends Object?>(
     TResult Function(_AppExceptions value) $default, {
     required TResult Function(_networkException value) networkException,
+    required TResult Function(_noInternetException value) noInternetException,
+    required TResult Function(_ServerNotOnlie value) serverNotOnlie,
     required TResult Function(_statusCodeNot200 value) statusCodeNot200,
     required TResult Function(_apiSendsErrorStatus value) apiSendsErrorStatus,
     required TResult Function(_appAuthException value) appAuthException,
@@ -435,6 +470,8 @@ class _$_networkException implements _networkException {
   TResult? mapOrNull<TResult extends Object?>(
     TResult Function(_AppExceptions value)? $default, {
     TResult Function(_networkException value)? networkException,
+    TResult Function(_noInternetException value)? noInternetException,
+    TResult Function(_ServerNotOnlie value)? serverNotOnlie,
     TResult Function(_statusCodeNot200 value)? statusCodeNot200,
     TResult Function(_apiSendsErrorStatus value)? apiSendsErrorStatus,
     TResult Function(_appAuthException value)? appAuthException,
@@ -448,6 +485,8 @@ class _$_networkException implements _networkException {
   TResult maybeMap<TResult extends Object?>(
     TResult Function(_AppExceptions value)? $default, {
     TResult Function(_networkException value)? networkException,
+    TResult Function(_noInternetException value)? noInternetException,
+    TResult Function(_ServerNotOnlie value)? serverNotOnlie,
     TResult Function(_statusCodeNot200 value)? statusCodeNot200,
     TResult Function(_apiSendsErrorStatus value)? apiSendsErrorStatus,
     TResult Function(_appAuthException value)? appAuthException,
@@ -472,6 +511,387 @@ abstract class _networkException implements AppExceptions {
   @override
   @JsonKey(ignore: true)
   _$$_networkExceptionCopyWith<_$_networkException> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$_noInternetExceptionCopyWith<$Res>
+    implements $AppExceptionsCopyWith<$Res> {
+  factory _$$_noInternetExceptionCopyWith(_$_noInternetException value,
+          $Res Function(_$_noInternetException) then) =
+      __$$_noInternetExceptionCopyWithImpl<$Res>;
+  @override
+  $Res call({String? message, Exception? e});
+}
+
+/// @nodoc
+class __$$_noInternetExceptionCopyWithImpl<$Res>
+    extends _$AppExceptionsCopyWithImpl<$Res>
+    implements _$$_noInternetExceptionCopyWith<$Res> {
+  __$$_noInternetExceptionCopyWithImpl(_$_noInternetException _value,
+      $Res Function(_$_noInternetException) _then)
+      : super(_value, (v) => _then(v as _$_noInternetException));
+
+  @override
+  _$_noInternetException get _value => super._value as _$_noInternetException;
+
+  @override
+  $Res call({
+    Object? message = freezed,
+    Object? e = freezed,
+  }) {
+    return _then(_$_noInternetException(
+      message: message == freezed
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String?,
+      e: e == freezed
+          ? _value.e
+          : e // ignore: cast_nullable_to_non_nullable
+              as Exception?,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_noInternetException implements _noInternetException {
+  _$_noInternetException({this.message = "No internet", this.e});
+
+  @override
+  @JsonKey()
+  final String? message;
+  @override
+  final Exception? e;
+
+  @override
+  String toString() {
+    return 'AppExceptions.noInternetException(message: $message, e: $e)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_noInternetException &&
+            const DeepCollectionEquality().equals(other.message, message) &&
+            const DeepCollectionEquality().equals(other.e, e));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(message),
+      const DeepCollectionEquality().hash(e));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_noInternetExceptionCopyWith<_$_noInternetException> get copyWith =>
+      __$$_noInternetExceptionCopyWithImpl<_$_noInternetException>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(String? message, Exception? e) $default, {
+    required TResult Function(String? message, Exception? e) networkException,
+    required TResult Function(String? message, Exception? e)
+        noInternetException,
+    required TResult Function(String? message, Exception? e) serverNotOnlie,
+    required TResult Function(String? message, Exception? e) statusCodeNot200,
+    required TResult Function(String? message, Exception? e)
+        apiSendsErrorStatus,
+    required TResult Function(String? message, Exception? e) appAuthException,
+    required TResult Function(String? message, Exception? e) serverException,
+  }) {
+    return noInternetException(message, e);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult Function(String? message, Exception? e)? $default, {
+    TResult Function(String? message, Exception? e)? networkException,
+    TResult Function(String? message, Exception? e)? noInternetException,
+    TResult Function(String? message, Exception? e)? serverNotOnlie,
+    TResult Function(String? message, Exception? e)? statusCodeNot200,
+    TResult Function(String? message, Exception? e)? apiSendsErrorStatus,
+    TResult Function(String? message, Exception? e)? appAuthException,
+    TResult Function(String? message, Exception? e)? serverException,
+  }) {
+    return noInternetException?.call(message, e);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(String? message, Exception? e)? $default, {
+    TResult Function(String? message, Exception? e)? networkException,
+    TResult Function(String? message, Exception? e)? noInternetException,
+    TResult Function(String? message, Exception? e)? serverNotOnlie,
+    TResult Function(String? message, Exception? e)? statusCodeNot200,
+    TResult Function(String? message, Exception? e)? apiSendsErrorStatus,
+    TResult Function(String? message, Exception? e)? appAuthException,
+    TResult Function(String? message, Exception? e)? serverException,
+    required TResult orElse(),
+  }) {
+    if (noInternetException != null) {
+      return noInternetException(message, e);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_AppExceptions value) $default, {
+    required TResult Function(_networkException value) networkException,
+    required TResult Function(_noInternetException value) noInternetException,
+    required TResult Function(_ServerNotOnlie value) serverNotOnlie,
+    required TResult Function(_statusCodeNot200 value) statusCodeNot200,
+    required TResult Function(_apiSendsErrorStatus value) apiSendsErrorStatus,
+    required TResult Function(_appAuthException value) appAuthException,
+    required TResult Function(_ServerException value) serverException,
+  }) {
+    return noInternetException(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult Function(_AppExceptions value)? $default, {
+    TResult Function(_networkException value)? networkException,
+    TResult Function(_noInternetException value)? noInternetException,
+    TResult Function(_ServerNotOnlie value)? serverNotOnlie,
+    TResult Function(_statusCodeNot200 value)? statusCodeNot200,
+    TResult Function(_apiSendsErrorStatus value)? apiSendsErrorStatus,
+    TResult Function(_appAuthException value)? appAuthException,
+    TResult Function(_ServerException value)? serverException,
+  }) {
+    return noInternetException?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_AppExceptions value)? $default, {
+    TResult Function(_networkException value)? networkException,
+    TResult Function(_noInternetException value)? noInternetException,
+    TResult Function(_ServerNotOnlie value)? serverNotOnlie,
+    TResult Function(_statusCodeNot200 value)? statusCodeNot200,
+    TResult Function(_apiSendsErrorStatus value)? apiSendsErrorStatus,
+    TResult Function(_appAuthException value)? appAuthException,
+    TResult Function(_ServerException value)? serverException,
+    required TResult orElse(),
+  }) {
+    if (noInternetException != null) {
+      return noInternetException(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _noInternetException implements AppExceptions {
+  factory _noInternetException({final String? message, final Exception? e}) =
+      _$_noInternetException;
+
+  @override
+  String? get message;
+  @override
+  Exception? get e;
+  @override
+  @JsonKey(ignore: true)
+  _$$_noInternetExceptionCopyWith<_$_noInternetException> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$_ServerNotOnlieCopyWith<$Res>
+    implements $AppExceptionsCopyWith<$Res> {
+  factory _$$_ServerNotOnlieCopyWith(
+          _$_ServerNotOnlie value, $Res Function(_$_ServerNotOnlie) then) =
+      __$$_ServerNotOnlieCopyWithImpl<$Res>;
+  @override
+  $Res call({String? message, Exception? e});
+}
+
+/// @nodoc
+class __$$_ServerNotOnlieCopyWithImpl<$Res>
+    extends _$AppExceptionsCopyWithImpl<$Res>
+    implements _$$_ServerNotOnlieCopyWith<$Res> {
+  __$$_ServerNotOnlieCopyWithImpl(
+      _$_ServerNotOnlie _value, $Res Function(_$_ServerNotOnlie) _then)
+      : super(_value, (v) => _then(v as _$_ServerNotOnlie));
+
+  @override
+  _$_ServerNotOnlie get _value => super._value as _$_ServerNotOnlie;
+
+  @override
+  $Res call({
+    Object? message = freezed,
+    Object? e = freezed,
+  }) {
+    return _then(_$_ServerNotOnlie(
+      message: message == freezed
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String?,
+      e: e == freezed
+          ? _value.e
+          : e // ignore: cast_nullable_to_non_nullable
+              as Exception?,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_ServerNotOnlie implements _ServerNotOnlie {
+  _$_ServerNotOnlie({this.message = "Server Not online", this.e});
+
+  @override
+  @JsonKey()
+  final String? message;
+  @override
+  final Exception? e;
+
+  @override
+  String toString() {
+    return 'AppExceptions.serverNotOnlie(message: $message, e: $e)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_ServerNotOnlie &&
+            const DeepCollectionEquality().equals(other.message, message) &&
+            const DeepCollectionEquality().equals(other.e, e));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(message),
+      const DeepCollectionEquality().hash(e));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_ServerNotOnlieCopyWith<_$_ServerNotOnlie> get copyWith =>
+      __$$_ServerNotOnlieCopyWithImpl<_$_ServerNotOnlie>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(String? message, Exception? e) $default, {
+    required TResult Function(String? message, Exception? e) networkException,
+    required TResult Function(String? message, Exception? e)
+        noInternetException,
+    required TResult Function(String? message, Exception? e) serverNotOnlie,
+    required TResult Function(String? message, Exception? e) statusCodeNot200,
+    required TResult Function(String? message, Exception? e)
+        apiSendsErrorStatus,
+    required TResult Function(String? message, Exception? e) appAuthException,
+    required TResult Function(String? message, Exception? e) serverException,
+  }) {
+    return serverNotOnlie(message, e);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult Function(String? message, Exception? e)? $default, {
+    TResult Function(String? message, Exception? e)? networkException,
+    TResult Function(String? message, Exception? e)? noInternetException,
+    TResult Function(String? message, Exception? e)? serverNotOnlie,
+    TResult Function(String? message, Exception? e)? statusCodeNot200,
+    TResult Function(String? message, Exception? e)? apiSendsErrorStatus,
+    TResult Function(String? message, Exception? e)? appAuthException,
+    TResult Function(String? message, Exception? e)? serverException,
+  }) {
+    return serverNotOnlie?.call(message, e);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(String? message, Exception? e)? $default, {
+    TResult Function(String? message, Exception? e)? networkException,
+    TResult Function(String? message, Exception? e)? noInternetException,
+    TResult Function(String? message, Exception? e)? serverNotOnlie,
+    TResult Function(String? message, Exception? e)? statusCodeNot200,
+    TResult Function(String? message, Exception? e)? apiSendsErrorStatus,
+    TResult Function(String? message, Exception? e)? appAuthException,
+    TResult Function(String? message, Exception? e)? serverException,
+    required TResult orElse(),
+  }) {
+    if (serverNotOnlie != null) {
+      return serverNotOnlie(message, e);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_AppExceptions value) $default, {
+    required TResult Function(_networkException value) networkException,
+    required TResult Function(_noInternetException value) noInternetException,
+    required TResult Function(_ServerNotOnlie value) serverNotOnlie,
+    required TResult Function(_statusCodeNot200 value) statusCodeNot200,
+    required TResult Function(_apiSendsErrorStatus value) apiSendsErrorStatus,
+    required TResult Function(_appAuthException value) appAuthException,
+    required TResult Function(_ServerException value) serverException,
+  }) {
+    return serverNotOnlie(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult Function(_AppExceptions value)? $default, {
+    TResult Function(_networkException value)? networkException,
+    TResult Function(_noInternetException value)? noInternetException,
+    TResult Function(_ServerNotOnlie value)? serverNotOnlie,
+    TResult Function(_statusCodeNot200 value)? statusCodeNot200,
+    TResult Function(_apiSendsErrorStatus value)? apiSendsErrorStatus,
+    TResult Function(_appAuthException value)? appAuthException,
+    TResult Function(_ServerException value)? serverException,
+  }) {
+    return serverNotOnlie?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_AppExceptions value)? $default, {
+    TResult Function(_networkException value)? networkException,
+    TResult Function(_noInternetException value)? noInternetException,
+    TResult Function(_ServerNotOnlie value)? serverNotOnlie,
+    TResult Function(_statusCodeNot200 value)? statusCodeNot200,
+    TResult Function(_apiSendsErrorStatus value)? apiSendsErrorStatus,
+    TResult Function(_appAuthException value)? appAuthException,
+    TResult Function(_ServerException value)? serverException,
+    required TResult orElse(),
+  }) {
+    if (serverNotOnlie != null) {
+      return serverNotOnlie(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _ServerNotOnlie implements AppExceptions {
+  factory _ServerNotOnlie({final String? message, final Exception? e}) =
+      _$_ServerNotOnlie;
+
+  @override
+  String? get message;
+  @override
+  Exception? get e;
+  @override
+  @JsonKey(ignore: true)
+  _$$_ServerNotOnlieCopyWith<_$_ServerNotOnlie> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -554,6 +974,9 @@ class _$_statusCodeNot200 implements _statusCodeNot200 {
   TResult when<TResult extends Object?>(
     TResult Function(String? message, Exception? e) $default, {
     required TResult Function(String? message, Exception? e) networkException,
+    required TResult Function(String? message, Exception? e)
+        noInternetException,
+    required TResult Function(String? message, Exception? e) serverNotOnlie,
     required TResult Function(String? message, Exception? e) statusCodeNot200,
     required TResult Function(String? message, Exception? e)
         apiSendsErrorStatus,
@@ -568,6 +991,8 @@ class _$_statusCodeNot200 implements _statusCodeNot200 {
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(String? message, Exception? e)? $default, {
     TResult Function(String? message, Exception? e)? networkException,
+    TResult Function(String? message, Exception? e)? noInternetException,
+    TResult Function(String? message, Exception? e)? serverNotOnlie,
     TResult Function(String? message, Exception? e)? statusCodeNot200,
     TResult Function(String? message, Exception? e)? apiSendsErrorStatus,
     TResult Function(String? message, Exception? e)? appAuthException,
@@ -581,6 +1006,8 @@ class _$_statusCodeNot200 implements _statusCodeNot200 {
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(String? message, Exception? e)? $default, {
     TResult Function(String? message, Exception? e)? networkException,
+    TResult Function(String? message, Exception? e)? noInternetException,
+    TResult Function(String? message, Exception? e)? serverNotOnlie,
     TResult Function(String? message, Exception? e)? statusCodeNot200,
     TResult Function(String? message, Exception? e)? apiSendsErrorStatus,
     TResult Function(String? message, Exception? e)? appAuthException,
@@ -598,6 +1025,8 @@ class _$_statusCodeNot200 implements _statusCodeNot200 {
   TResult map<TResult extends Object?>(
     TResult Function(_AppExceptions value) $default, {
     required TResult Function(_networkException value) networkException,
+    required TResult Function(_noInternetException value) noInternetException,
+    required TResult Function(_ServerNotOnlie value) serverNotOnlie,
     required TResult Function(_statusCodeNot200 value) statusCodeNot200,
     required TResult Function(_apiSendsErrorStatus value) apiSendsErrorStatus,
     required TResult Function(_appAuthException value) appAuthException,
@@ -611,6 +1040,8 @@ class _$_statusCodeNot200 implements _statusCodeNot200 {
   TResult? mapOrNull<TResult extends Object?>(
     TResult Function(_AppExceptions value)? $default, {
     TResult Function(_networkException value)? networkException,
+    TResult Function(_noInternetException value)? noInternetException,
+    TResult Function(_ServerNotOnlie value)? serverNotOnlie,
     TResult Function(_statusCodeNot200 value)? statusCodeNot200,
     TResult Function(_apiSendsErrorStatus value)? apiSendsErrorStatus,
     TResult Function(_appAuthException value)? appAuthException,
@@ -624,6 +1055,8 @@ class _$_statusCodeNot200 implements _statusCodeNot200 {
   TResult maybeMap<TResult extends Object?>(
     TResult Function(_AppExceptions value)? $default, {
     TResult Function(_networkException value)? networkException,
+    TResult Function(_noInternetException value)? noInternetException,
+    TResult Function(_ServerNotOnlie value)? serverNotOnlie,
     TResult Function(_statusCodeNot200 value)? statusCodeNot200,
     TResult Function(_apiSendsErrorStatus value)? apiSendsErrorStatus,
     TResult Function(_appAuthException value)? appAuthException,
@@ -731,6 +1164,9 @@ class _$_apiSendsErrorStatus implements _apiSendsErrorStatus {
   TResult when<TResult extends Object?>(
     TResult Function(String? message, Exception? e) $default, {
     required TResult Function(String? message, Exception? e) networkException,
+    required TResult Function(String? message, Exception? e)
+        noInternetException,
+    required TResult Function(String? message, Exception? e) serverNotOnlie,
     required TResult Function(String? message, Exception? e) statusCodeNot200,
     required TResult Function(String? message, Exception? e)
         apiSendsErrorStatus,
@@ -745,6 +1181,8 @@ class _$_apiSendsErrorStatus implements _apiSendsErrorStatus {
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(String? message, Exception? e)? $default, {
     TResult Function(String? message, Exception? e)? networkException,
+    TResult Function(String? message, Exception? e)? noInternetException,
+    TResult Function(String? message, Exception? e)? serverNotOnlie,
     TResult Function(String? message, Exception? e)? statusCodeNot200,
     TResult Function(String? message, Exception? e)? apiSendsErrorStatus,
     TResult Function(String? message, Exception? e)? appAuthException,
@@ -758,6 +1196,8 @@ class _$_apiSendsErrorStatus implements _apiSendsErrorStatus {
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(String? message, Exception? e)? $default, {
     TResult Function(String? message, Exception? e)? networkException,
+    TResult Function(String? message, Exception? e)? noInternetException,
+    TResult Function(String? message, Exception? e)? serverNotOnlie,
     TResult Function(String? message, Exception? e)? statusCodeNot200,
     TResult Function(String? message, Exception? e)? apiSendsErrorStatus,
     TResult Function(String? message, Exception? e)? appAuthException,
@@ -775,6 +1215,8 @@ class _$_apiSendsErrorStatus implements _apiSendsErrorStatus {
   TResult map<TResult extends Object?>(
     TResult Function(_AppExceptions value) $default, {
     required TResult Function(_networkException value) networkException,
+    required TResult Function(_noInternetException value) noInternetException,
+    required TResult Function(_ServerNotOnlie value) serverNotOnlie,
     required TResult Function(_statusCodeNot200 value) statusCodeNot200,
     required TResult Function(_apiSendsErrorStatus value) apiSendsErrorStatus,
     required TResult Function(_appAuthException value) appAuthException,
@@ -788,6 +1230,8 @@ class _$_apiSendsErrorStatus implements _apiSendsErrorStatus {
   TResult? mapOrNull<TResult extends Object?>(
     TResult Function(_AppExceptions value)? $default, {
     TResult Function(_networkException value)? networkException,
+    TResult Function(_noInternetException value)? noInternetException,
+    TResult Function(_ServerNotOnlie value)? serverNotOnlie,
     TResult Function(_statusCodeNot200 value)? statusCodeNot200,
     TResult Function(_apiSendsErrorStatus value)? apiSendsErrorStatus,
     TResult Function(_appAuthException value)? appAuthException,
@@ -801,6 +1245,8 @@ class _$_apiSendsErrorStatus implements _apiSendsErrorStatus {
   TResult maybeMap<TResult extends Object?>(
     TResult Function(_AppExceptions value)? $default, {
     TResult Function(_networkException value)? networkException,
+    TResult Function(_noInternetException value)? noInternetException,
+    TResult Function(_ServerNotOnlie value)? serverNotOnlie,
     TResult Function(_statusCodeNot200 value)? statusCodeNot200,
     TResult Function(_apiSendsErrorStatus value)? apiSendsErrorStatus,
     TResult Function(_appAuthException value)? appAuthException,
@@ -907,6 +1353,9 @@ class _$_appAuthException implements _appAuthException {
   TResult when<TResult extends Object?>(
     TResult Function(String? message, Exception? e) $default, {
     required TResult Function(String? message, Exception? e) networkException,
+    required TResult Function(String? message, Exception? e)
+        noInternetException,
+    required TResult Function(String? message, Exception? e) serverNotOnlie,
     required TResult Function(String? message, Exception? e) statusCodeNot200,
     required TResult Function(String? message, Exception? e)
         apiSendsErrorStatus,
@@ -921,6 +1370,8 @@ class _$_appAuthException implements _appAuthException {
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(String? message, Exception? e)? $default, {
     TResult Function(String? message, Exception? e)? networkException,
+    TResult Function(String? message, Exception? e)? noInternetException,
+    TResult Function(String? message, Exception? e)? serverNotOnlie,
     TResult Function(String? message, Exception? e)? statusCodeNot200,
     TResult Function(String? message, Exception? e)? apiSendsErrorStatus,
     TResult Function(String? message, Exception? e)? appAuthException,
@@ -934,6 +1385,8 @@ class _$_appAuthException implements _appAuthException {
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(String? message, Exception? e)? $default, {
     TResult Function(String? message, Exception? e)? networkException,
+    TResult Function(String? message, Exception? e)? noInternetException,
+    TResult Function(String? message, Exception? e)? serverNotOnlie,
     TResult Function(String? message, Exception? e)? statusCodeNot200,
     TResult Function(String? message, Exception? e)? apiSendsErrorStatus,
     TResult Function(String? message, Exception? e)? appAuthException,
@@ -951,6 +1404,8 @@ class _$_appAuthException implements _appAuthException {
   TResult map<TResult extends Object?>(
     TResult Function(_AppExceptions value) $default, {
     required TResult Function(_networkException value) networkException,
+    required TResult Function(_noInternetException value) noInternetException,
+    required TResult Function(_ServerNotOnlie value) serverNotOnlie,
     required TResult Function(_statusCodeNot200 value) statusCodeNot200,
     required TResult Function(_apiSendsErrorStatus value) apiSendsErrorStatus,
     required TResult Function(_appAuthException value) appAuthException,
@@ -964,6 +1419,8 @@ class _$_appAuthException implements _appAuthException {
   TResult? mapOrNull<TResult extends Object?>(
     TResult Function(_AppExceptions value)? $default, {
     TResult Function(_networkException value)? networkException,
+    TResult Function(_noInternetException value)? noInternetException,
+    TResult Function(_ServerNotOnlie value)? serverNotOnlie,
     TResult Function(_statusCodeNot200 value)? statusCodeNot200,
     TResult Function(_apiSendsErrorStatus value)? apiSendsErrorStatus,
     TResult Function(_appAuthException value)? appAuthException,
@@ -977,6 +1434,8 @@ class _$_appAuthException implements _appAuthException {
   TResult maybeMap<TResult extends Object?>(
     TResult Function(_AppExceptions value)? $default, {
     TResult Function(_networkException value)? networkException,
+    TResult Function(_noInternetException value)? noInternetException,
+    TResult Function(_ServerNotOnlie value)? serverNotOnlie,
     TResult Function(_statusCodeNot200 value)? statusCodeNot200,
     TResult Function(_apiSendsErrorStatus value)? apiSendsErrorStatus,
     TResult Function(_appAuthException value)? appAuthException,
@@ -1084,6 +1543,9 @@ class _$_ServerException implements _ServerException {
   TResult when<TResult extends Object?>(
     TResult Function(String? message, Exception? e) $default, {
     required TResult Function(String? message, Exception? e) networkException,
+    required TResult Function(String? message, Exception? e)
+        noInternetException,
+    required TResult Function(String? message, Exception? e) serverNotOnlie,
     required TResult Function(String? message, Exception? e) statusCodeNot200,
     required TResult Function(String? message, Exception? e)
         apiSendsErrorStatus,
@@ -1098,6 +1560,8 @@ class _$_ServerException implements _ServerException {
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(String? message, Exception? e)? $default, {
     TResult Function(String? message, Exception? e)? networkException,
+    TResult Function(String? message, Exception? e)? noInternetException,
+    TResult Function(String? message, Exception? e)? serverNotOnlie,
     TResult Function(String? message, Exception? e)? statusCodeNot200,
     TResult Function(String? message, Exception? e)? apiSendsErrorStatus,
     TResult Function(String? message, Exception? e)? appAuthException,
@@ -1111,6 +1575,8 @@ class _$_ServerException implements _ServerException {
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(String? message, Exception? e)? $default, {
     TResult Function(String? message, Exception? e)? networkException,
+    TResult Function(String? message, Exception? e)? noInternetException,
+    TResult Function(String? message, Exception? e)? serverNotOnlie,
     TResult Function(String? message, Exception? e)? statusCodeNot200,
     TResult Function(String? message, Exception? e)? apiSendsErrorStatus,
     TResult Function(String? message, Exception? e)? appAuthException,
@@ -1128,6 +1594,8 @@ class _$_ServerException implements _ServerException {
   TResult map<TResult extends Object?>(
     TResult Function(_AppExceptions value) $default, {
     required TResult Function(_networkException value) networkException,
+    required TResult Function(_noInternetException value) noInternetException,
+    required TResult Function(_ServerNotOnlie value) serverNotOnlie,
     required TResult Function(_statusCodeNot200 value) statusCodeNot200,
     required TResult Function(_apiSendsErrorStatus value) apiSendsErrorStatus,
     required TResult Function(_appAuthException value) appAuthException,
@@ -1141,6 +1609,8 @@ class _$_ServerException implements _ServerException {
   TResult? mapOrNull<TResult extends Object?>(
     TResult Function(_AppExceptions value)? $default, {
     TResult Function(_networkException value)? networkException,
+    TResult Function(_noInternetException value)? noInternetException,
+    TResult Function(_ServerNotOnlie value)? serverNotOnlie,
     TResult Function(_statusCodeNot200 value)? statusCodeNot200,
     TResult Function(_apiSendsErrorStatus value)? apiSendsErrorStatus,
     TResult Function(_appAuthException value)? appAuthException,
@@ -1154,6 +1624,8 @@ class _$_ServerException implements _ServerException {
   TResult maybeMap<TResult extends Object?>(
     TResult Function(_AppExceptions value)? $default, {
     TResult Function(_networkException value)? networkException,
+    TResult Function(_noInternetException value)? noInternetException,
+    TResult Function(_ServerNotOnlie value)? serverNotOnlie,
     TResult Function(_statusCodeNot200 value)? statusCodeNot200,
     TResult Function(_apiSendsErrorStatus value)? apiSendsErrorStatus,
     TResult Function(_appAuthException value)? appAuthException,
