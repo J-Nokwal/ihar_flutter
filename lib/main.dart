@@ -4,6 +4,7 @@ import 'dart:ffi';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -19,8 +20,10 @@ import 'package:ihar_flutter/core/modals/userModal.dart';
 import 'package:ihar_flutter/core/requests/postRequests.dart';
 import 'package:ihar_flutter/core/requests/userRequests.dart';
 import 'package:ihar_flutter/features/common/snakbar.dart';
+import 'core/AppLoacalNotificationServices.dart';
 import 'core/bloc/auth_ bloc/auth_bloc.dart';
 import 'core/deepLinksService.dart';
+import 'core/firebase_classes/firebase_notifications.dart';
 import 'core/injection.dart';
 import 'firebase_options.dart';
 
@@ -33,8 +36,8 @@ void main() async {
     final license = await rootBundle.loadString('assets/google_fonts/OFL.txt');
     yield LicenseEntryWithLineBreaks(['google_fonts'], license);
   });
+  await getIt<AppFirebaseNotifications>().setup();
 
-  // runApp(MaterialApp(debugShowCheckedModeBanner: false, home: MyApp()));
   runApp(MyApp());
 }
 
@@ -59,6 +62,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     super.initState();
     getIt<DynamicLinkService>().handleDynamicLinks().listen(onDeepLink);
     getIt<DynamicLinkService>().getInitialLink().then(onDeepLink);
+    getIt<AppFirebaseNotifications>()
+      ..handleforgroundMessage()
+      ..handleBackgroundOnTapMessage()
+      ..handleTerminatedStateOnTapMessage();
   }
 
   void onDeepLink(AppDeepLinkData? appDeepLinkData) async {
