@@ -29,6 +29,7 @@ environment:
 dependencies:
   auto_size_text: ^3.0.0
   cached_network_image: ^3.2.1
+  cloud_firestore: ^3.4.4
   connectivity_plus: ^2.3.6
   cupertino_icons: ^1.0.2
   dio: ^4.0.6

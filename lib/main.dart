@@ -123,7 +123,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               if (s.appExceptions == AppExceptions.noInternetException()) {
                 return _navigator.currentState
                     ?.pushNamedAndRemoveUntil("/noInternetScreen", ((route) => route.isFirst), arguments: [
-                  () {
+                  () async {
                     authBloc.add(const AuthEvent.checkAuth());
                   },
                   null

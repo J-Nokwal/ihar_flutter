@@ -39,10 +39,10 @@
               "client_type": 3
             },
             {
-              "client_id": "823310925634-ev4js8srkk3jch35ebv7jg17co7nod54.apps.googleusercontent.com",
+              "client_id": "823310925634-ens7ahlrkclqp1u0ki2ctm56u3pr9tdm.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.iharFlutter"
+                "bundle_id": "com.example.iharflutter"
               }
             }
           ]

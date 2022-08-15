@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:ihar_flutter/core/firebase_classes/firebase_firestor.dart';
 import 'package:ihar_flutter/features/common/loadingAnimation.dart';
 
 import '../../core/bloc/auth_ bloc/auth_bloc.dart';
@@ -15,9 +16,10 @@ class ServerNotAvailableWidget extends StatelessWidget {
   const ServerNotAvailableWidget({Key? key, required this.onPress, this.popOnRetry = false}) : super(key: key);
   final Future<void> Function() onPress;
   final bool? popOnRetry;
+
   @override
   Widget build(BuildContext context) {
-    FirebaseMessaging.instance.subscribeToTopic("serverOnline");
+    handleServerRequest();
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarIconBrightness: Brightness.light),
       child: Scaffold(
@@ -81,5 +83,17 @@ class ServerNotAvailableWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void handleServerRequest() async {
+    try {
+      FirebaseMessaging.instance.subscribeToTopic("serverOnline");
+      String? token = await FirebaseMessaging.instance.getToken();
+      if (token != null) {
+        getIt<AppFireStore>().requestForServer(token: token);
+      }
+    } on Exception catch (e) {
+      // TODO
+    }
   }
 }
