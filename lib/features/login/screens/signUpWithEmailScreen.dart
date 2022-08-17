@@ -21,6 +21,20 @@ class SignUpWithEmailScreen extends StatelessWidget {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarIconBrightness: Brightness.light),
       child: Scaffold(
+        floatingActionButton: Padding(
+          padding: EdgeInsets.zero,
+          child: IconButton(
+            tooltip: "Back",
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            icon: const Icon(
+              Icons.arrow_back_ios_new_rounded,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
         body: Container(
           decoration: const BoxDecoration(
               image: DecorationImage(fit: BoxFit.cover, image: AssetImage("assets/imgaes/background.png"))),
@@ -58,23 +72,26 @@ class SignUpWithEmailScreen extends StatelessWidget {
                             ));
                       }
 
-                      return Column(
-                        children: [
-                          const SizedBox(height: 10),
-                          TextFieldCustom(
-                              controller: emailController, hintText: "Email", isValid: true, obscureText: false),
-                          const SizedBox(height: 20),
-                          TextFieldCustom(
-                              controller: passwordController, hintText: "Email", isValid: true, obscureText: true),
-                          const SizedBox(height: 20),
-                          TextButton(
-                              onPressed: () {
-                                BlocProvider.of<SignUpWithEmailBloc>(context).add(SignUpWithEmailEvent.started(
-                                    emailAddress: emailController.text, password: passwordController.text));
-                              },
-                              child: const Text("signUp")),
-                          const SizedBox(height: 20),
-                        ],
+                      return SizedBox(
+                        width: 280,
+                        child: Column(
+                          children: [
+                            const SizedBox(height: 10),
+                            TextFieldCustom(
+                                controller: emailController, hintText: "Email", isValid: true, obscureText: false),
+                            const SizedBox(height: 20),
+                            TextFieldCustom(
+                                controller: passwordController, hintText: "Email", isValid: true, obscureText: true),
+                            const SizedBox(height: 20),
+                            TextButton(
+                                onPressed: () {
+                                  BlocProvider.of<SignUpWithEmailBloc>(context).add(SignUpWithEmailEvent.started(
+                                      emailAddress: emailController.text, password: passwordController.text));
+                                },
+                                child: const Text("signUp")),
+                            const SizedBox(height: 20),
+                          ],
+                        ),
                       );
                     },
                   ),
