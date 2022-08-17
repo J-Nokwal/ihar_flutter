@@ -1,6 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
-class TextFieldCustom extends StatelessWidget {
+class TextFieldCustom extends StatefulWidget {
   const TextFieldCustom({
     Key? key,
     required this.controller,
@@ -17,28 +19,46 @@ class TextFieldCustom extends StatelessWidget {
   final bool obscureText;
 
   @override
+  State<TextFieldCustom> createState() => _TextFieldCustomState(obscureText);
+}
+
+class _TextFieldCustomState extends State<TextFieldCustom> {
+  _TextFieldCustomState(this.showtext);
+  late bool showtext;
+  @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(
-            width: 0,
-            style: BorderStyle.none,
+    return Padding(
+      padding: const EdgeInsets.only(left: 10, right: 10),
+      child: TextFormField(
+        controller: widget.controller,
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.symmetric(horizontal: 5),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.0),
+            borderSide: BorderSide.none,
           ),
+          // suffixIconColor: Colors.grey[],
+          suffixIcon: (widget.obscureText)
+              ? SizedBox(
+                  height: 1,
+                  child: InkWell(
+                      onTap: () => setState(() {
+                            showtext = !showtext;
+                          }),
+                      child: Icon(
+                        (showtext) ? Icons.visibility_off : Icons.visibility,
+                        color: Colors.grey,
+                      )))
+              : null,
+          focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0), borderSide: BorderSide.none),
+          // focusedBorder: InputBorder.none,
+          filled: true,
+          // fillColor: kColors.purpleLight,
+          hintText: widget.hintText,
+          errorText: widget.isValid ? null : widget.errorText,
         ),
-        // focusedBorder: OutlineInputBorder(
-        // borderRadius: BorderRadius.circular(8.0),
-        // borderSide: BorderSide(width: 1.5, style: BorderStyle.solid, color: ),
-        // ),
-        focusedBorder: InputBorder.none,
-        filled: true,
-        // fillColor: kColors.purpleLight,
-        hintText: hintText,
-        errorText: isValid ? null : errorText,
+        obscureText: showtext,
       ),
-      obscureText: obscureText,
     );
   }
 }

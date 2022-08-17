@@ -1,15 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'dart:ffi';
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ihar_flutter/core/errors.dart';
@@ -20,7 +16,6 @@ import 'package:ihar_flutter/core/modals/userModal.dart';
 import 'package:ihar_flutter/core/requests/postRequests.dart';
 import 'package:ihar_flutter/core/requests/userRequests.dart';
 import 'package:ihar_flutter/features/common/snakbar.dart';
-import 'core/AppLoacalNotificationServices.dart';
 import 'core/bloc/auth_ bloc/auth_bloc.dart';
 import 'core/deepLinksService.dart';
 import 'core/firebase_classes/firebase_notifications.dart';
@@ -158,6 +153,13 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 }
 
 ThemeData _buildTheme(brightness) {
-  var baseTheme = ThemeData(brightness: brightness, fontFamily: "Convergence", useMaterial3: true);
+  var baseTheme = ThemeData(
+    brightness: brightness,
+    fontFamily: "Convergence",
+    useMaterial3: true,
+    pageTransitionsTheme: PageTransitionsTheme(builders: const {
+      TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+    }),
+  );
   return baseTheme;
 }

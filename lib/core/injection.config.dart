@@ -4,6 +4,7 @@
 // InjectableConfigGenerator
 // **************************************************************************
 
+// ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i13;
 
 import 'package:connectivity_plus/connectivity_plus.dart' as _i14;
@@ -58,7 +59,8 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.lazySingleton<_i16.AuthBloc>(() => _i16.AuthBloc(
       dio: get<_i7.Dio>(),
       appAuth: get<_i3.AppAuth>(),
-      appFireBaseStorage: get<_i4.AppFireBaseStorage>()));
+      appFireBaseStorage: get<_i4.AppFireBaseStorage>(),
+      connectivityStream: get<_i13.Stream<_i14.ConnectivityResult>>()));
   gh.factory<_i17.CommentsBloc>(
       () => _i17.CommentsBloc(get<_i7.Dio>(), get<_i3.AppAuth>()));
   gh.factory<_i18.CreatePostBloc>(() => _i18.CreatePostBloc(

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -49,7 +50,7 @@ class HomeScreen extends StatelessWidget {
       // ));
       return AnnotatedRegion<SystemUiOverlayStyle>(
         value: const SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarIconBrightness: Brightness.dark),
-        child: RepositoryProvider(
+        child: RepositoryProvider<UserModals>(
           create: (context) => user,
           child: WillPopScope(
             onWillPop: () async {
@@ -59,7 +60,14 @@ class HomeScreen extends StatelessWidget {
               return true;
             },
             child: Scaffold(
-              drawer: (Device.screenType == ScreenType.mobile) ? Drawer(child: AppDrawer()) : null,
+              floatingActionButton: FloatingActionButton(
+                tooltip: "Create a Rumor",
+                onPressed: () {
+                  Navigator.of(context).pushNamed("/home/createPost", arguments: user);
+                },
+                child: Semantics(label: "Create post", child: const Icon(Icons.edit)),
+              ),
+              drawer: (Device.screenType == ScreenType.mobile) ? Drawer(child: AppDrawer(user: user)) : null,
               body: SearchBar(
                 floatingSearchBarController: floatingSearchBarController,
                 scrollController: scrollController,
@@ -256,39 +264,41 @@ class __HomeBodyState extends State<_HomeBody> {
             decoration: const BoxDecoration(
                 image: DecorationImage(fit: BoxFit.cover, image: AssetImage("assets/imgaes/background.png"))),
             child: Center(
-              child: Container(
-                color: Colors.white,
-                // height: 500,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    (Device.screenType == ScreenType.mobile) ? Text("mobile") : Text("web"),
-                    Text(Device.screenType.toString()),
-                    TextButton(
-                      child: const Text("sign out"),
-                      onPressed: () async {
-                        print(Theme.of(context).platform);
-                        // await signInWithGoogle();
-                        AppAuth appAuth = getIt<AppAuth>();
-                        await appAuth.signOut();
+              child: (!kDebugMode)
+                  ? Container()
+                  : Container(
+                      color: Colors.white,
+                      // height: 500,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          (Device.screenType == ScreenType.mobile) ? Text("mobile") : Text("web"),
+                          Text(Device.screenType.toString()),
+                          TextButton(
+                            child: const Text("sign out"),
+                            onPressed: () async {
+                              print(Theme.of(context).platform);
+                              // await signInWithGoogle();
+                              AppAuth appAuth = getIt<AppAuth>();
+                              await appAuth.signOut();
 
-                        // await appAuth.sendSignInLinkToEmail();
-                      },
+                              // await appAuth.sendSignInLinkToEmail();
+                            },
+                          ),
+                          TextButton(
+                            child: const Text("showbar"),
+                            onPressed: () async {
+                              if (widget.floatingSearchBarController.isVisible) {
+                                widget.floatingSearchBarController.hide();
+                              } else if (widget.floatingSearchBarController.isHidden) {
+                                widget.floatingSearchBarController.show();
+                              }
+                            },
+                          ),
+                        ],
+                      ),
                     ),
-                    TextButton(
-                      child: const Text("showbar"),
-                      onPressed: () async {
-                        if (widget.floatingSearchBarController.isVisible) {
-                          widget.floatingSearchBarController.hide();
-                        } else if (widget.floatingSearchBarController.isHidden) {
-                          widget.floatingSearchBarController.show();
-                        }
-                      },
-                    ),
-                  ],
-                ),
-              ),
             ),
           ),
           // FeedTiles(scrollController: scrollController),
@@ -297,53 +307,53 @@ class __HomeBodyState extends State<_HomeBody> {
             child: FeedTiles(scrollController: scrollController),
           ),
           // CustomFeed(scrollController: scrollController, gkey: gkey),
-          if (Device.width > 760)
-            Positioned(
-              width: 360,
-              left: size.width / 2,
-              child: ConstrainedBox(
-                constraints: BoxConstraints(),
-                child: Row(children: [
-                  // Expanded(child: Container()),
-                  Expanded(
-                      child: Container(
-                    height: 400,
-                    color: Colors.amber,
-                    child: Center(
-                      child: GestureDetector(
-                        onTap: () {
-                          print("gesture detector prict");
-                        },
-                        child: TextButton(
-                          child: Text("ddf"),
-                          onPressed: () {
-                            print("object");
-                            // final RenderBox? renderBox = gkey.currentContext?.findRenderObject();
+          // if (Device.width > 760)
+          //   Positioned(
+          //     width: 360,
+          //     left: size.width / 2,
+          //     child: ConstrainedBox(
+          //       constraints: BoxConstraints(),
+          //       child: Row(children: [
+          //         // Expanded(child: Container()),
+          //         Expanded(
+          //             child: Container(
+          //           height: 400,
+          //           color: Colors.amber,
+          //           child: Center(
+          //             child: GestureDetector(
+          //               onTap: () {
+          //                 print("gesture detector prict");
+          //               },
+          //               child: TextButton(
+          //                 child: Text("ddf"),
+          //                 onPressed: () {
+          //                   print("object");
+          //                   // final RenderBox? renderBox = gkey.currentContext?.findRenderObject();
 
-                            // final Size size = renderBox; // or _widgetKey.currentContext?.size
-                            // print('Size: ${size.width}, ${size.height}');
+          //                   // final Size size = renderBox; // or _widgetKey.currentContext?.size
+          //                   // print('Size: ${size.width}, ${size.height}');
 
-                            // final Offset offset = renderBox.localToGlobal(Offset.zero);
-                            // print('Offset: ${offset.dx}, ${offset.dy}');
-                            // print('Position: ${(offset.dx + size.width) / 2}, ${(offset.dy + size.height) / 2}');
+          //                   // final Offset offset = renderBox.localToGlobal(Offset.zero);
+          //                   // print('Offset: ${offset.dx}, ${offset.dy}');
+          //                   // print('Position: ${(offset.dx + size.width) / 2}, ${(offset.dy + size.height) / 2}');
 
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              final RenderBox box = gkey.currentContext?.findRenderObject() as RenderBox;
-                              final ofset = box.localToGlobal(Offset.zero);
-                              print(ofset);
-                              scrollController.animateTo(ofset.dy,
-                                  duration: Duration(seconds: 1), curve: Curves.easeIn);
+          //                   WidgetsBinding.instance.addPostFrameCallback((_) {
+          //                     final RenderBox box = gkey.currentContext?.findRenderObject() as RenderBox;
+          //                     final ofset = box.localToGlobal(Offset.zero);
+          //                     print(ofset);
+          //                     scrollController.animateTo(ofset.dy,
+          //                         duration: Duration(seconds: 1), curve: Curves.easeIn);
 
-                              // size = box.size;
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                  )),
-                ]),
-              ),
-            ),
+          //                     // size = box.size;
+          //                   });
+          //                 },
+          //               ),
+          //             ),
+          //           ),
+          //         )),
+          //       ]),
+          //     ),
+          //   ),
           AnimatedPositioned(
             top: showAppBar ? 0 : -70,
             // bottom: showAppBar ? 10 : 0,
@@ -362,7 +372,7 @@ class __HomeBodyState extends State<_HomeBody> {
                     if (Device.screenType != ScreenType.mobile) SizedBox(width: 20),
                     if (Device.screenType == ScreenType.mobile)
                       IconButton(
-                        icon: Icon(Icons.menu),
+                        icon: const Icon(Icons.menu),
                         onPressed: () {
                           Scaffold.of(context).openDrawer();
                         },
