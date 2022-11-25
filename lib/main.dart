@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'dart:ffi';
+import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
@@ -26,6 +27,10 @@ import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  //Use [flutterfire configure] if DefaultFirebaseOptions not available
+  ByteData data = await PlatformAssetBundle().load('assets/ca/cert.pem');
+  SecurityContext.defaultContext.setTrustedCertificatesBytes(data.buffer.asUint8List());
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   // await Firebase.initializeApp();
   configureDependencies();

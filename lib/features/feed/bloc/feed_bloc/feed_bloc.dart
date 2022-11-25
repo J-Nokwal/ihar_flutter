@@ -25,9 +25,9 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         getPosts: (_GetPosts event) async {
           if (event.isRefreshed) {
             postList = [];
-            pageId = 0;
-            noOfPages = 1;
-            queryTime = null;
+              pageId = 0;
+              noOfPages = 1;
+              queryTime = null;
           }
           if (postList.isEmpty) {
             emit(const _LoadingAnimation());

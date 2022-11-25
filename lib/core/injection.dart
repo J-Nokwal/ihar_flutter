@@ -24,15 +24,15 @@ abstract class RegisterModulesss {
   Dio get dio {
     if (kIsWeb) {
       // return Dio(BaseOptions(baseUrl: "https://20.29.16.252"));
-      return Dio(BaseOptions(baseUrl: "http://192.168.18.184:8080", responseType: ResponseType.plain));
+      return Dio(BaseOptions(baseUrl: "https://www.iheardarumor.social", responseType: ResponseType.plain));
       // return Dio(BaseOptions(baseUrl: "https://localhost:8080"));
     }
     if (Platform.isAndroid) {
-      return Dio(BaseOptions(baseUrl: "http://20.29.16.252", responseType: ResponseType.plain));
+      return Dio(BaseOptions(baseUrl: "https://www.iheardarumor.social", responseType: ResponseType.plain));
       // return Dio(BaseOptions(baseUrl: "http://192.168.18.184:8080", responseType: ResponseType.plain));
     }
 
-    return Dio(BaseOptions(baseUrl: "localhost:8080"));
+    return Dio(BaseOptions(baseUrl: "https://www.iheardarumor.social"));
   } // construct it the way you want
 
   @lazySingleton

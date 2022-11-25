@@ -73,7 +73,7 @@ abstract class CommentsRequests {
       if (!await hasNetwork()) {
         throw AppExceptions.networkException();
       }
-      final Response response = await dio.patch('/user', data: commentModalToJson(comment));
+      final Response response = await dio.patch('/comment', data: commentModalToJson(comment));
       print(response.data);
     } on DioError catch (e) {
       if (e.response != null && e.response!.statusCode == 400) {

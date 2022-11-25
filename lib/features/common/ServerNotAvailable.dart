@@ -37,8 +37,8 @@ class ServerNotAvailableWidget extends StatelessWidget {
                       onTap: () {
                         if (kDebugMode || kProfileMode) {
                           if (getIt<Dio>().options.baseUrl == "http://192.168.18.184:8080") {
-                            getIt<Dio>().options =
-                                BaseOptions(baseUrl: "http://20.29.16.252", responseType: ResponseType.plain);
+                            getIt<Dio>().options = BaseOptions(
+                                baseUrl: "https://www.iheardarumor.social", responseType: ResponseType.plain);
                             print("change to server");
                           } else {
                             getIt<Dio>().options =
