@@ -4,16 +4,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterfire_ui/auth.dart' as flutterfire_ui;
 import 'package:ihar_flutter/core/firebase_classes/firebase_auth.dart';
 import 'package:ihar_flutter/core/injection.dart';
+import 'package:ihar_flutter/core/modals/userModal.dart';
 import 'package:ihar_flutter/features/CreatePost/bloc/create_post_bloc/create_post_bloc.dart';
 import 'package:ihar_flutter/features/common/snakbar.dart';
+import 'package:ihar_flutter/features/common/userAvatarWidget.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../common/loadingAnimation.dart';
 
 class CreatePostScreen extends StatefulWidget {
-  const CreatePostScreen({Key? key}) : super(key: key);
-
+  const CreatePostScreen({Key? key, required this.userModals}) : super(key: key);
+  final UserModals userModals;
   @override
   State<CreatePostScreen> createState() => _CreatePostScreenState();
 }
@@ -103,11 +105,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                flutterfire_ui.UserAvatar(
-                                  auth: getIt<AppAuth>().firebaseAuthInstance,
-                                  size: 50,
+                                AppUserAvatar(
+                                  userModals: widget.userModals,
+                                  size: 40,
                                 ),
-                                SizedBox(width: 10),
+                                const SizedBox(width: 10),
                                 SizedBox(
                                   width: Device.width - 110,
                                   child: TextField(
@@ -116,7 +118,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                     controller: messageController,
                                     keyboardType: TextInputType.multiline,
                                     maxLines: null,
-                                    decoration: InputDecoration(hintText: "I heard a rumor,", border: InputBorder.none),
+                                    decoration:
+                                        const InputDecoration(hintText: "I heard a rumor,", border: InputBorder.none),
                                   ),
                                 ),
                                 // ),

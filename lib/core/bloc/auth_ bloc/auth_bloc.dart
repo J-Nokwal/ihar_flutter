@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,26 +25,38 @@ part 'auth_bloc.freezed.dart';
 
 @lazySingleton
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  AuthBloc({required Dio dio, required AppAuth appAuth, required AppFireBaseStorage appFireBaseStorage})
+  AuthBloc(
+      {required Dio dio,
+      required AppAuth appAuth,
+      required AppFireBaseStorage appFireBaseStorage,
+      required Stream<ConnectivityResult> connectivityStream})
       : super(const _Loading()) {
-    StreamSubscription<User?>? streamSubscription;
-
+    StreamSubscription<User?>? streamUserSubscription;
+    StreamSubscription<ConnectivityResult>? connectionSubscription;
     void addStream() {
-      streamSubscription ??= appAuth.firebaseAuthInstance.userChanges().skip(1).listen(
+      streamUserSubscription ??= appAuth.firebaseAuthInstance.userChanges().skip(1).listen(
         (User? user) {
           print("user changes");
           add(const AuthEvent.checkAuth());
         },
       );
+      connectionSubscription ??= connectivityStream.skip(1).listen((event) {
+        print("connection changes");
+        if (event == ConnectivityResult.none) {
+          add(const AuthEvent.checkAuth());
+        }
+      });
     }
 
     void closeStream() async {
-      await streamSubscription?.cancel();
-      streamSubscription = null;
+      await streamUserSubscription?.cancel();
+      streamUserSubscription = null;
+      await connectionSubscription?.cancel();
+      connectionSubscription = null;
     }
 
     on<AuthEvent>((event, emit) async {
-      if (!await hasNetwork()) {
+      if (await Connectivity().checkConnectivity() == ConnectivityResult.none || !await hasNetwork()) {
         emit(_Exception(appExceptions: AppExceptions.noInternetException()));
         return;
       }

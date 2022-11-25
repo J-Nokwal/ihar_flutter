@@ -28,7 +28,10 @@ class Routers {
                   user: settings.arguments as UserModals,
                 ));
       case '/home/createPost':
-        return MaterialPageRoute(builder: (_) => CreatePostScreen());
+        return MaterialPageRoute(
+            builder: (_) => CreatePostScreen(
+                  userModals: settings.arguments as UserModals,
+                ));
       case '/home/postComments':
         return MaterialPageRoute(
             builder: (_) => CommentsScreen(

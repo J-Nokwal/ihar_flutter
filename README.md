@@ -1,16 +1,20 @@
-# ihar_flutter
 
-A new Flutter project.
+![Logo](https://i.ibb.co/X5NknDV/Plugin-icon-2.png)
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+# I Heard A Rumor 
+Mobile application using flutter 
 
-A few resources to get you started if this is your first Flutter project:
+I Heard A Rumor is a social media platform where one can Share
+photos and things they heard about and want to spread that rumor.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+Backend on Go : [GitHub Repo](https://github.com/J-Nokwal/ihar_backend)
+
+## Tech Stack
+
+**Client:** Flutter React
+
+**Server:** Golang,Mysql
+
