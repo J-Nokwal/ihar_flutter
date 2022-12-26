@@ -10,23 +10,42 @@ class DynamicLinkService {
   Future<String> createDynamicLink(bool short, DeepLinkType deepLinkType, String idInString) async {
     String linkMessage;
     String type;
+    final DynamicLinkParameters parameters;
     if (deepLinkType == DeepLinkType.postLink) {
       type = "postLink";
+      parameters = DynamicLinkParameters(
+        uriPrefix: 'https://iharflutter.page.link',
+        link: Uri.parse('https://iharflutter.page.link/$type?id=$idInString'),
+        longDynamicLink: Uri.parse(
+            'https://iharflutter.page.link/?link=https://iharflutter.page.link/postLink?id=$idInString&apn=com.example.ihar_flutter&afl=https://iheardarumor.web.app/post/$idInString&ofl=https://iheardarumor.web.app/post/$idInString&ifl=https://iheardarumor.web.app/post/$idInString&amv=1'),
+      );
     } else {
       type = "userProfileLink";
+      parameters = DynamicLinkParameters(
+        uriPrefix: 'https://iharflutter.page.link',
+        link: Uri.parse('https://iharflutter.page.link/$type?id=$idInString'),
+        longDynamicLink: Uri.parse(
+            'https://iharflutter.page.link/?link=https://iharflutter.page.link/userProfileLink?id=$idInString&apn=com.example.ihar_flutter&afl=https://iheardarumor.web.app/user/$idInString&ofl=https://iheardarumor.web.app/user/$idInString&ifl=https://iheardarumor.web.app/user/$idInString&amv=1'),
+      );
     }
-    final DynamicLinkParameters parameters = DynamicLinkParameters(
-      uriPrefix: 'https://iharflutter.page.link',
-      link: Uri.parse('https://iharflutter.page.link/$type?id=$idInString'),
-      androidParameters: const AndroidParameters(
-        packageName: 'com.example.ihar_flutter',
-      ),
-      // iosParameters: IOSParameters(
-      //   bundleId: "com.example.iharFlutter",
-      //   appStoreId: "123456789",
-      //   fallbackUrl: Uri.parse("ihar-7ab4b.firebaseapp.com"),
-      // ),
-    );
+    // final DynamicLinkParameters parameters = DynamicLinkParameters(
+    //     uriPrefix: 'https://iharflutter.page.link',
+    //     link: Uri.parse('https://iharflutter.page.link/$type?id=$idInString'),
+    //     androidParameters: AndroidParameters(
+    //         packageName: 'com.example.ihar_flutter',
+    //         fallbackUrl: Uri.parse((type == 'userProfileLink')
+    //             ? 'https://iheardarumor.web.app/user/$idInString'
+    //             : 'https://iheardarumor.web.app/post/$idInString'),
+    //         minimumVersion: 1),
+    //     longDynamicLink: Uri.parse(
+    //         'https://iharflutter.page.link/?link=https://iharflutter.page.link/postLink?id=37&apn=com.example.ihar_flutter&afl=https://iheardarumor.web.app&ofl=https://iheardarumor.web.app&ifl=https://iheardarumor.web.app&d=1')
+    //     // iosParameters: IOSParameters(
+    //     //   bundleId: "com.example.iharFlutter",
+    //     //   appStoreId: "123456789",
+    //     //   fallbackUrl: Uri.parse("ihar-7ab4b.firebaseapp.com"),
+    //     // ),
+    //     );
+
     Uri url;
     if (short) {
       final ShortDynamicLink shortLink = await FirebaseDynamicLinks.instance.buildShortLink(parameters);

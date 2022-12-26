@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/widgets.dart';
@@ -7,6 +9,7 @@ import 'package:injectable/injectable.dart';
 import '../AppLoacalNotificationServices.dart';
 import '../bloc/auth_ bloc/auth_bloc.dart';
 import '../injection.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage? message) async {
   await Firebase.initializeApp();
@@ -62,6 +65,12 @@ class AppFirebaseNotifications {
           FirebaseMessaging.instance.unsubscribeFromTopic("serverOnline");
           getIt<AuthBloc>().add(const AuthEvent.checkAuth());
           LocalNotificationService.display(message, notificationsPlugin: flutterLocalNotificationsPlugin);
+        } else if (message.data['type'] == 'link') {
+          // try {
+          // await launchUrl(message.data['link']);
+          // } catch (e) {}
+          LocalNotificationService.display(message,
+              notificationsPlugin: flutterLocalNotificationsPlugin, payload: jsonEncode(message.data));
         } else {
           LocalNotificationService.display(message, notificationsPlugin: flutterLocalNotificationsPlugin);
         }
@@ -72,12 +81,16 @@ class AppFirebaseNotifications {
   Future<void> handleBackgroundOnTapMessage() async {
     ///When the app is in background but opened and user taps
     ///on the notification
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
       // implement when bacground(but opened) message button pressed
       if (message.data['type'] == 'serverOnline') {
         try {
           FirebaseMessaging.instance.unsubscribeFromTopic("serverOnline");
           getIt<AuthBloc>().add(const AuthEvent.checkAuth());
+        } catch (e) {}
+      } else if (message.data['type'] == 'link') {
+        try {
+          await launchUrl(Uri.parse(message.data['link']), mode: LaunchMode.externalApplication);
         } catch (e) {}
       }
     });
@@ -86,12 +99,16 @@ class AppFirebaseNotifications {
   Future<void> handleTerminatedStateOnTapMessage() async {
     //gives you the message on which user taps
     ///and it opened the app from terminated state
-    FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) {
+    FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) async {
       if (message != null) {
         // implement when message pressed from terminated state
         if (message.data['type'] == 'serverOnline') {
           try {
             FirebaseMessaging.instance.unsubscribeFromTopic("serverOnline");
+          } catch (e) {}
+        } else if (message.data['type'] == 'link') {
+          try {
+            await launchUrl(Uri.parse(message.data['link']), mode: LaunchMode.externalApplication);
           } catch (e) {}
         }
       }

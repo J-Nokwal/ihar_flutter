@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ihar_flutter/core/deepLinksService.dart';
 import 'package:ihar_flutter/core/firebase_classes/firebase_auth.dart';
 import 'package:ihar_flutter/core/injection.dart';
@@ -77,12 +78,26 @@ class _UserScreenState extends State<UserScreen> with SingleTickerProviderStateM
                             PopupMenuItem(
                                 onTap: () async {
                                   final text = await getIt<DynamicLinkService>()
-                                      .createDynamicLink(false, DeepLinkType.userProfileLink, widget.user.userId);
-                                  Clipboard.setData(ClipboardData(text: text));
+                                      .createDynamicLink(true, DeepLinkType.userProfileLink, widget.user.userId);
+                                  await Clipboard.setData(ClipboardData(text: text));
+                                  await Fluttertoast.showToast(
+                                      msg: "Link copied to ClipBoard",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      textColor: Colors.black,
+                                      backgroundColor: Colors.white);
                                 },
                                 child: Text("Copy profile link")),
-                            PopupMenuItem(child: Text("Share profile link")),
-                            if (!widget.ownProfile) PopupMenuItem(child: Text("report user")),
+                            // PopupMenuItem(child: Text("Share profile link")),
+                            if (!widget.ownProfile)
+                              PopupMenuItem(
+                                  onTap: () {
+                                    Fluttertoast.showToast(
+                                        msg: "Report Send",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        textColor: Colors.black,
+                                        backgroundColor: Colors.white);
+                                  },
+                                  child: Text("report")),
                           ];
                         }),
                   ],

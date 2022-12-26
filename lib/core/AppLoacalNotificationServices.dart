@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'firebase_classes/firebase_notifications.dart';
 
@@ -14,15 +17,15 @@ class LocalNotificationService {
       initializationSettings,
       onSelectNotification: (String? payload) async {
         if (payload != null) {
-          // switch (jsonDecode(payload)['type']) {
-          //   case 'showReport':
-          //     try {
-          //       launch(jsonDecode(payload)['link']);
-          //     } catch (e) {}
-          //     break;
-          //   default:
-          // }
-          try {} catch (e) {}
+          switch (jsonDecode(payload)['type']) {
+            case 'link':
+              try {
+                print("launching " + jsonDecode(payload)['link']);
+                launchUrl(Uri.parse(jsonDecode(payload)['link']), mode: LaunchMode.externalApplication);
+              } catch (e) {}
+              break;
+            default:
+          }
         }
       },
     );

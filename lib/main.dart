@@ -143,7 +143,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             });
           },
           child: MaterialApp(
-            title: 'Material App',
+            title: 'I Heard A Rumor',
             debugShowCheckedModeBanner: false,
             navigatorKey: _navigator,
             scaffoldMessengerKey: _scafoldMessangerKey,

@@ -5,9 +5,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
+import 'package:ihar_flutter/core/deepLinksService.dart';
 import 'package:ihar_flutter/core/modals/CommentsAllModal.dart';
 import 'package:ihar_flutter/core/modals/postModal.dart';
 import 'package:ihar_flutter/core/requests/postRequests.dart';
@@ -90,9 +93,28 @@ class CommentsScreen extends StatelessWidget {
                                 Expanded(child: Container()),
                                 PopupMenuButton(itemBuilder: (context) {
                                   return [
-                                    PopupMenuItem(child: Text("share")),
-                                    PopupMenuItem(child: Text("link")),
-                                    PopupMenuItem(child: Text("report")),
+                                    // PopupMenuItem(child: Text("share")),
+                                    PopupMenuItem(
+                                        onTap: () async {
+                                          final text = await getIt<DynamicLinkService>()
+                                              .createDynamicLink(true, DeepLinkType.postLink, post.id.toString());
+                                          await Clipboard.setData(ClipboardData(text: text));
+                                          await Fluttertoast.showToast(
+                                              msg: "Link copied to ClipBoard",
+                                              toastLength: Toast.LENGTH_SHORT,
+                                              textColor: Colors.black,
+                                              backgroundColor: Colors.white);
+                                        },
+                                        child: Text("link")),
+                                    PopupMenuItem(
+                                        onTap: () {
+                                          Fluttertoast.showToast(
+                                              msg: "Report Send",
+                                              toastLength: Toast.LENGTH_SHORT,
+                                              textColor: Colors.black,
+                                              backgroundColor: Colors.white);
+                                        },
+                                        child: Text("report")),
                                   ];
                                 }),
                                 const SizedBox(width: 10),
